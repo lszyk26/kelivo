@@ -55,12 +55,6 @@ jobs:
       - name: build apk
         run: flutter build apk --release --split-per-abi
 
-      - name: verify signature
-        run: |
-          unzip -l build/app/outputs/flutter-apk/app-arm64-v8a-release.apk | grep -E 'META-INF/.*\.(RSA|EC|SF)$' || {
-            echo "::error::APK 没有 v1 签名，手机可能拒绝安装"; exit 1; }
-          keytool -printcert -jarfile build/app/outputs/flutter-apk/app-arm64-v8a-release.apk | grep -E 'Owner|SHA256' | head -3
-
       - name: rename
         run: |
           V=$(grep '^version:' pubspec.yaml | sed 's/version: //' | tr -d ' ')
@@ -71,8 +65,36 @@ jobs:
           done
           ls -l *.apk
 
+      # 先上传产物：即使后面的校验误报，也不至于白跑
       - uses: actions/upload-artifact@v4
         with:
           name: kelivo-apk
           path: build/app/outputs/flutter-apk/*.apk
           if-no-files-found: error
+
+      # 用 apksigner 校验 v2/v3（minSdk>=24 时 AGP 不写 v1 JAR 签名，属于正常）
+      - name: verify signature
+        run: |
+          set -euo pipefail
+          BT=$(ls -d "${ANDROID_HOME:-$ANDROID_SDK_ROOT}"/build-tools/* 2>/dev/null | sort -V | tail -1)
+          echo "build-tools: $BT"
+          APK=build/app/outputs/flutter-apk/Kelivo_master_*_arm64-v8a.apk
+          "$BT/apksigner" verify --verbose --print-certs $APK | tee /tmp/verify.txt
+          grep -E "Verified using|Min SDK|Number of signers" /tmp/verify.txt || true
+
+          EXP=$(keytool -list -v -keystore android/app/key.jks \
+                  -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+                  -alias "${{ secrets.KEY_ALIAS }}" \
+                | grep -m1 "SHA256:" | sed 's/.*SHA256: //' | tr -d ':' | tr 'a-f' 'A-F')
+          GOT=$(grep -m1 "Signer #1 certificate SHA-256 digest" /tmp/verify.txt | awk '{print $NF}' | tr -d ':' | tr 'a-f' 'A-F')
+          echo "expected=$EXP"
+          echo "got=$GOT"
+          if [ -z "$GOT" ]; then
+            echo "::error::APK 没有有效签名（v2/v3 校验失败）"
+            exit 1
+          fi
+          if [ -n "$EXP" ] && [ "$EXP" != "$GOT" ]; then
+            echo "::error::签名证书与密钥库不匹配（可能退回 debug 签名）"
+            exit 1
+          fi
+          echo "✅ 签名校验通过（v2/v3，证书一致）"

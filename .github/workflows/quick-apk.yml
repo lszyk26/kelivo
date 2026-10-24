@@ -86,7 +86,7 @@ jobs:
                   -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
                   -alias "${{ secrets.KEY_ALIAS }}" \
                 | grep -m1 "SHA256:" | sed 's/.*SHA256: //' | tr -d ':' | tr 'a-f' 'A-F')
-          GOT=$(grep -m1 "Signer #1 certificate SHA-256 digest" /tmp/verify.txt | awk '{print $NF}' | tr -d ':' | tr 'a-f' 'A-F')
+          GOT=$(grep -m1 "certificate SHA-256 digest" /tmp/verify.txt | awk '{print $NF}' | tr -d ':' | tr 'a-f' 'A-F')
           echo "expected=$EXP"
           echo "got=$GOT"
           if [ -z "$GOT" ]; then

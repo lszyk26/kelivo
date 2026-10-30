@@ -196,19 +196,34 @@ class _BoundedSelectionToolbar extends StatelessWidget {
   final BuildContext selectionContext;
   final VoidCallback onDismiss;
 
-  static const _inlineTypes = <ContextMenuButtonType>{
-    ContextMenuButtonType.cut,
-    ContextMenuButtonType.copy,
-    ContextMenuButtonType.paste,
-  };
+  /// Roughly the room a single inline button needs besides its label.
+  static const _buttonOverhead = 36.0;
+
+  /// Room kept free for the trailing overflow button.
+  static const _overflowSlot = 52.0;
 
   @override
   Widget build(BuildContext context) {
+    // Keep the actions inline while they still fit on one row; only spill the
+    // tail into the bounded popup when the row would be wider than the screen.
+    if (buttonItems.length < 2) {
+      return AdaptiveTextSelectionToolbar.buttonItems(
+        anchors: anchors,
+        buttonItems: buttonItems,
+      );
+    }
+    final l10n = MaterialLocalizations.of(context);
+    final available = MediaQuery.sizeOf(context).width - 32;
     final inline = <ContextMenuButtonItem>[];
     final overflow = <ContextMenuButtonItem>[];
+    var used = 0.0;
     for (final item in buttonItems) {
-      if (_inlineTypes.contains(item.type)) {
+      final width =
+          _measureLabelWidth(context, _labelOf(item, l10n)) + _buttonOverhead;
+      if (overflow.isEmpty &&
+          (inline.isEmpty || used + width + _overflowSlot <= available)) {
         inline.add(item);
+        used += width;
       } else {
         overflow.add(item);
       }
@@ -219,7 +234,6 @@ class _BoundedSelectionToolbar extends StatelessWidget {
         buttonItems: inline,
       );
     }
-    final l10n = MaterialLocalizations.of(context);
     return AdaptiveTextSelectionToolbar(
       anchors: anchors,
       children: [
@@ -227,7 +241,7 @@ class _BoundedSelectionToolbar extends StatelessWidget {
           TextSelectionToolbarTextButton(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             onPressed: item.onPressed,
-            child: Text(item.label ?? _defaultSelectionLabel(item.type, l10n)),
+            child: Text(_labelOf(item, l10n)),
           ),
         _BoundedOverflowButton(
           items: overflow,
@@ -238,6 +252,22 @@ class _BoundedSelectionToolbar extends StatelessWidget {
       ],
     );
   }
+}
+
+String _labelOf(ContextMenuButtonItem item, MaterialLocalizations l10n) =>
+    item.label ?? _defaultSelectionLabel(item.type, l10n);
+
+double _measureLabelWidth(BuildContext context, String label) {
+  if (label.isEmpty) return 0;
+  final painter = TextPainter(
+    text: TextSpan(text: label, style: DefaultTextStyle.of(context).style),
+    maxLines: 1,
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  final width = painter.size.width;
+  painter.dispose();
+  return width;
 }
 
 String _defaultSelectionLabel(

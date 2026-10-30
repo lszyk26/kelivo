@@ -49,6 +49,18 @@ jobs:
           } > android/key.properties
           echo "✅ 签名配置已写入"
 
+      - name: preinstall NDK
+        run: |
+          set -euo pipefail
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          for i in 1 2 3 4; do
+            if sdkmanager --install "ndk;28.2.13676358"; then echo "ndk ok (try $i)"; break; fi
+            echo "::warning::ndk install failed, retry $i"
+            rm -rf "$ANDROID_HOME/ndk/28.2.13676358"
+            sleep 15
+          done
+          ls -1 "$ANDROID_HOME/ndk"
+
       - name: flutter pub get
         run: flutter pub get
 

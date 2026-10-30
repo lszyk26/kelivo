@@ -1,34 +1,50 @@
 import '../../chat/controllers/quote_editing_controller.dart';
 import '../../intelligent_ui/models/ui_context_attachment.dart';
 import '../../intelligent_ui/host/ui_composer_context_chip.dart';
+
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+
 import '../../../theme/app_semantic_colors.dart';
+
 import 'package:Kelivo/features/chat/widgets/tool_permission_widgets.dart';
+
 import '../services/composer_clipboard.dart';
+
 import 'package:Kelivo/shared/text_input/message_editing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, listEquals;
 import 'package:flutter/rendering.dart';
+
 import '../../../core/services/incoming_share_service.dart';
 import 'composer_attachment_card.dart';
+
 import 'dart:collection';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
+
 import '../../../theme/design_tokens.dart';
 import '../../../icons/lucide_adapter.dart';
 import '../../../icons/reasoning_icons.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
 import '../../../l10n/app_localizations.dart';
+
 import 'package:image_picker/image_picker.dart';
+
 import '../../../utils/file_import_helper.dart';
 import '../../../utils/image_compressor.dart';
 import '../../../utils/upload_dedupe.dart';
+
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
+
 import '../../../shared/responsive/breakpoints.dart';
+
 import 'dart:async';
 import 'dart:io';
+
 import '../../../core/models/chat_input_data.dart';
 import '../../../core/models/quote_ref.dart';
 import '../../../core/models/model_spec.dart';
@@ -51,14 +67,18 @@ import '../../../shared/widgets/interactive_drawer.dart';
 import '../../../shared/widgets/ios_tactile.dart';
 import '../../../shared/widgets/snackbar.dart';
 import '../../../utils/app_directories.dart';
+
 import 'package:super_clipboard/super_clipboard.dart';
 import 'package:re_editor/re_editor.dart' show CodeEditorTapRegion;
+
 import '../../../desktop/desktop_context_menu.dart';
 import '../../../shared/widgets/context_usage_ring.dart';
 import '../../../shared/widgets/long_message_editor.dart';
 import '../../../shared/widgets/app_text_selection_toolbar.dart';
 import '../services/context_usage_service.dart';
+
 import 'package:Kelivo/theme/app_font_weights.dart';
+
 import '../../../core/models/composer_draft.dart';
 import '../../../core/database/composer_draft_store.dart';
 
@@ -1540,6 +1560,32 @@ class _ChatInputBarState extends State<ChatInputBar>
       final canExpand = height > editable.preferredLineHeight * 2.5;
       if (canExpand != _canExpand) setState(() => _canExpand = canExpand);
     });
+  }
+
+  /// Copies the whole composer draft, so copying never depends on a text
+  /// selection (third-party IMEs cannot always produce one, see #1329).
+  Future<void> _copyDraft() async {
+    final text = _controller.text;
+    if (text.isEmpty) return;
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!mounted) return;
+    showAppSnackBar(
+      context,
+      message: AppLocalizations.of(context)!.chatMessageWidgetCopiedToClipboard,
+      type: NotificationType.success,
+    );
+  }
+
+  /// Selects the whole draft without going through the IME.
+  void _selectAllDraft() {
+    if (_composerLocked) return;
+    final text = _controller.text;
+    if (text.isEmpty) return;
+    _controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: text.length,
+    );
+    widget.focusNode?.requestFocus();
   }
 
   void _setExpanded(bool expanded) {
@@ -3802,8 +3848,7 @@ class _ChatInputBarState extends State<ChatInputBar>
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors
-                                  .white, // color-gate: ignore (on scrim over photo)
+                              Colors.white, // color-gate: ignore (on scrim over photo)
                             ),
                           ),
                         ),
@@ -3983,20 +4028,17 @@ class _ChatInputBarState extends State<ChatInputBar>
                   children: [
                     Expanded(
                       child: _QueuedInputBanner(
-                        label: AppLocalizations.of(
-                          context,
-                        )!.composerDraftRecovered,
-                        cancelLabel: AppLocalizations.of(
-                          context,
-                        )!.composerDraftRestore,
+                        label: AppLocalizations.of(context)!
+                            .composerDraftRecovered,
+                        cancelLabel: AppLocalizations.of(context)!
+                            .composerDraftRestore,
                         onCancel: widget.mediaController?.onRecoverDraft,
                       ),
                     ),
                     IosIconButton(
                       icon: Lucide.Trash2,
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.composerDraftDiscard,
+                      tooltip: AppLocalizations.of(context)!
+                          .composerDraftDiscard,
                       onTap: widget.mediaController?.onDiscardRecoveredDraft,
                     ),
                   ],
@@ -4009,9 +4051,8 @@ class _ChatInputBarState extends State<ChatInputBar>
                   previewText: widget.queuedPreviewText,
                   subtitle: widget.queuedSubtitle,
                   paused: widget.queuedPaused,
-                  cancelLabel: AppLocalizations.of(
-                    context,
-                  )!.chatInputBarQueuedCancel,
+                  cancelLabel: AppLocalizations.of(context)!
+                      .chatInputBarQueuedCancel,
                   onCancel: widget.onCancelQueuedInput,
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -4367,24 +4408,65 @@ class _ChatInputBarState extends State<ChatInputBar>
                                           // keyboard.
                                           child: CodeEditorTapRegion(
                                             child: TextFieldTapRegion(
-                                              child: IosIconButton(
-                                                icon: _isExpanded
-                                                    ? Lucide.Minimize2
-                                                    : Lucide.Maximize2,
-                                                size: 16,
-                                                color: theme
-                                                    .colorScheme
-                                                    .onSurface
-                                                    .withValues(alpha: 0.45),
-                                                tooltip: _isExpanded
-                                                    ? AppLocalizations.of(
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  if (_isExpanded) ...[
+                                                    IosIconButton(
+                                                      icon: Lucide.TextSelect,
+                                                      size: 15,
+                                                      color: theme
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(
+                                                            alpha: 0.45,
+                                                          ),
+                                                      tooltip: AppLocalizations.of(
                                                         context,
-                                                      )!.chatInputBarCollapse
-                                                    : AppLocalizations.of(
-                                                        context,
-                                                      )!.chatInputBarExpand,
-                                                onTap: () =>
-                                                    _setExpanded(!_isExpanded),
+                                                      )!.sideDrawerSelectionSelectAll,
+                                                      onTap: _selectAllDraft,
+                                                    ),
+                                                    IosIconButton(
+                                                      icon: Lucide.Copy,
+                                                      size: 15,
+                                                      color: theme
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(
+                                                            alpha: 0.45,
+                                                          ),
+                                                      tooltip:
+                                                          AppLocalizations.of(
+                                                            context,
+                                                          )!.sideDrawerMenuCopy,
+                                                      onTap: () => unawaited(
+                                                        _copyDraft(),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  IosIconButton(
+                                                    icon: _isExpanded
+                                                        ? Lucide.Minimize2
+                                                        : Lucide.Maximize2,
+                                                    size: 16,
+                                                    color: theme
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(
+                                                          alpha: 0.45,
+                                                        ),
+                                                    tooltip: _isExpanded
+                                                        ? AppLocalizations.of(
+                                                            context,
+                                                          )!.chatInputBarCollapse
+                                                        : AppLocalizations.of(
+                                                            context,
+                                                          )!.chatInputBarExpand,
+                                                    onTap: () => _setExpanded(
+                                                      !_isExpanded,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
@@ -4550,12 +4632,10 @@ class _ChatInputBarState extends State<ChatInputBar>
                         top: -12,
                         start: AppSpacing.sm,
                         child: _ImageModePill(
-                          label: AppLocalizations.of(
-                            context,
-                          )!.chatInputBarImageMode,
-                          closeTooltip: AppLocalizations.of(
-                            context,
-                          )!.chatInputBarDisableImageModeTooltip,
+                          label: AppLocalizations.of(context)!
+                              .chatInputBarImageMode,
+                          closeTooltip: AppLocalizations.of(context)!
+                              .chatInputBarDisableImageModeTooltip,
                           onClose: _composerLocked
                               ? null
                               : () {

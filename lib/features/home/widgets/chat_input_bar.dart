@@ -3848,7 +3848,8 @@ class _ChatInputBarState extends State<ChatInputBar>
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white, // color-gate: ignore (on scrim over photo)
+                              Colors
+                                  .white, // color-gate: ignore (on scrim over photo)
                             ),
                           ),
                         ),
@@ -4028,17 +4029,20 @@ class _ChatInputBarState extends State<ChatInputBar>
                   children: [
                     Expanded(
                       child: _QueuedInputBanner(
-                        label: AppLocalizations.of(context)!
-                            .composerDraftRecovered,
-                        cancelLabel: AppLocalizations.of(context)!
-                            .composerDraftRestore,
+                        label: AppLocalizations.of(
+                          context,
+                        )!.composerDraftRecovered,
+                        cancelLabel: AppLocalizations.of(
+                          context,
+                        )!.composerDraftRestore,
                         onCancel: widget.mediaController?.onRecoverDraft,
                       ),
                     ),
                     IosIconButton(
                       icon: Lucide.Trash2,
-                      tooltip: AppLocalizations.of(context)!
-                          .composerDraftDiscard,
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.composerDraftDiscard,
                       onTap: widget.mediaController?.onDiscardRecoveredDraft,
                     ),
                   ],
@@ -4051,8 +4055,9 @@ class _ChatInputBarState extends State<ChatInputBar>
                   previewText: widget.queuedPreviewText,
                   subtitle: widget.queuedSubtitle,
                   paused: widget.queuedPaused,
-                  cancelLabel: AppLocalizations.of(context)!
-                      .chatInputBarQueuedCancel,
+                  cancelLabel: AppLocalizations.of(
+                    context,
+                  )!.chatInputBarQueuedCancel,
                   onCancel: widget.onCancelQueuedInput,
                 ),
                 const SizedBox(height: AppSpacing.xs),
@@ -4632,10 +4637,12 @@ class _ChatInputBarState extends State<ChatInputBar>
                         top: -12,
                         start: AppSpacing.sm,
                         child: _ImageModePill(
-                          label: AppLocalizations.of(context)!
-                              .chatInputBarImageMode,
-                          closeTooltip: AppLocalizations.of(context)!
-                              .chatInputBarDisableImageModeTooltip,
+                          label: AppLocalizations.of(
+                            context,
+                          )!.chatInputBarImageMode,
+                          closeTooltip: AppLocalizations.of(
+                            context,
+                          )!.chatInputBarDisableImageModeTooltip,
                           onClose: _composerLocked
                               ? null
                               : () {

@@ -1,3 +1,10 @@
+import '../../intelligent_ui/host/ui_persistence_host.dart';
+import 'package:Kelivo/features/intelligent_ui/host/ui_runtime_registry.dart';
+import 'package:Kelivo/features/intelligent_ui/widgets/genui_control_region.dart';
+import '../../../core/models/context_operation.dart';
+import '../../../core/models/context_compression_task.dart';
+import '../../chat/widgets/context_compression_status.dart';
+import '../../chat/widgets/context_operation_widgets.dart';
 import '../../browser/models/browser_tool_presentation.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -15,7 +22,6 @@ import '../../../core/models/chat_message.dart';
 import '../../../core/models/message_part.dart';
 import '../../../core/models/assistant.dart';
 import '../../../core/models/assistant_regex.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../utils/assistant_regex.dart';
 import '../../../shared/widgets/ios_checkbox.dart';
 import '../../../shared/widgets/selection_scroll_container.dart';
@@ -51,8 +57,6 @@ typedef OnDeleteAllVersions =
       Map<String, List<ChatMessage>> byGroup,
     );
 typedef OnForkConversation = Future<void> Function(ChatMessage message);
-typedef OnShareMessage =
-    void Function(int messageIndex, List<ChatMessage> messages);
 typedef OnSelectMessages =
     void Function(int messageIndex, List<ChatMessage> messages);
 typedef OnSpeakMessage = Future<void> Function(ChatMessage message);
@@ -107,6 +111,13 @@ class MessageListView extends StatefulWidget {
     required this.byGroup,
     required this.versionSelections,
     this.truncCollapsedIndex = -1,
+    this.contextOperations = const [],
+    this.contextTask,
+    this.contextTaskRevision,
+    this.contextTaskWaitingForApproval = false,
+    this.onOpenContextTask,
+    this.onOpenContextOperation,
+    this.onUndoContextOperation,
     required this.reasoning,
     required this.reasoningSegments,
     required this.contentSplits,
@@ -133,7 +144,6 @@ class MessageListView extends StatefulWidget {
     this.onDeleteMessage,
     this.onDeleteAllVersions,
     this.onForkConversation,
-    this.onShareMessage,
     this.onSelectMessages,
     this.onSpeakMessage,
     this.suggestions = const <String>[],
@@ -184,6 +194,14 @@ class MessageListView extends StatefulWidget {
 
   /// Pre-computed truncate index in collapsed message space (-1 = none).
   final int truncCollapsedIndex;
+  final List<ContextOperation> contextOperations;
+  final ContextCompressionTask? contextTask;
+  final String? contextTaskRevision;
+  final bool contextTaskWaitingForApproval;
+  final void Function(ContextCompressionTask task, Offset anchor)?
+  onOpenContextTask;
+  final ValueChanged<ContextOperation>? onOpenContextOperation;
+  final ValueChanged<ContextOperation>? onUndoContextOperation;
 
   final Map<String, stream_ctrl.ReasoningData> reasoning;
   final Map<String, List<stream_ctrl.ReasoningSegmentData>> reasoningSegments;
@@ -227,7 +245,6 @@ class MessageListView extends StatefulWidget {
   final OnDeleteMessage? onDeleteMessage;
   final OnDeleteAllVersions? onDeleteAllVersions;
   final OnForkConversation? onForkConversation;
-  final OnShareMessage? onShareMessage;
   final OnSelectMessages? onSelectMessages;
   final OnSpeakMessage? onSpeakMessage;
   final List<String> suggestions;
@@ -307,6 +324,20 @@ class _MessageListViewState extends State<MessageListView> {
 
   bool get _hasFooter => _showsFooter(widget);
 
+  bool _taskAt(int index) {
+    final task = widget.contextTask;
+    if (task == null ||
+        !compressionShowsDivider(task) ||
+        widget.selecting ||
+        index < 0 ||
+        index >= _effectiveRenderModels.length) {
+      return false;
+    }
+    return task.anchorGroupId == null
+        ? !widget.hasMoreAfter && index == _effectiveRenderModels.length - 1
+        : task.anchorGroupId == _effectiveRenderModels[index].slotId;
+  }
+
   static bool _showsFooter(MessageListView view) =>
       view.footer != null &&
       !view.hasMoreAfter &&
@@ -339,6 +370,7 @@ class _MessageListViewState extends State<MessageListView> {
       ToolExtentInvalidationQueue();
   var _awaitingAttachFlush = false;
   var _attachFlushScheduled = false;
+  final _uiRegistry = UiRuntimeRegistry();
   final FocusNode _keyboardFocusNode = FocusNode(
     debugLabel: 'timeline-keyboard-scroll-region',
   );
@@ -372,6 +404,17 @@ class _MessageListViewState extends State<MessageListView> {
     }
     final oldRenderModels = _effectiveRenderModels;
     _refreshRenderModels();
+    for (final message in widget.messages) {
+      // StreamingContentNotifier supplies the current parts to the child;
+      // the list's backing row can still contain an earlier checkpoint.
+      if (message.isStreaming) continue;
+      _uiRegistry.reconcile(
+        message,
+        hasProviderReasoning:
+            (widget.reasoning[message.id]?.text.isNotEmpty ?? false) ||
+            (widget.reasoningSegments[message.id]?.isNotEmpty ?? false),
+      );
+    }
     _synchronizeExtentCache(oldWidget, oldRenderModels);
     _snapshotToolSignatures();
   }
@@ -615,7 +658,19 @@ class _MessageListViewState extends State<MessageListView> {
         _hasFooter && index == _effectiveRenderModels.length - 1
         ? _footerExtent
         : 0;
-    return _estimateMessageExtent(index, crossAxisExtent) + footerExtent;
+    final nodes = index >= _effectiveRenderModels.length
+        ? 0
+        : widget.contextOperations
+              .where(
+                (op) =>
+                    !op.revoked &&
+                    op.anchorGroupId == _effectiveRenderModels[index].slotId,
+              )
+              .length;
+    return _estimateMessageExtent(index, crossAxisExtent) +
+        footerExtent +
+        (nodes + (_taskAt(index) ? 1 : 0)) *
+            (28 + widget.dividerPadding.vertical);
   }
 
   double _estimateMessageExtent(int? index, double crossAxisExtent) {
@@ -886,6 +941,12 @@ class _MessageListViewState extends State<MessageListView> {
       reasoningCountAtSplit: reasoningCountAtSplit,
       toolCountAtSplit: toolCountAtSplit,
       transformText: _estimateVisualTransform,
+      transformProtectedText: (text) => applyAssistantRegexesProtected(
+        text,
+        assistant: widget.assistant,
+        scope: AssistantRegexScope.assistant,
+        target: AssistantRegexTransformTarget.visual,
+      ),
       partsArrivalOrdered: message.isStreaming,
       inlineThinkingExpanded: !settings.collapseThinking,
     );
@@ -1240,7 +1301,8 @@ class _MessageListViewState extends State<MessageListView> {
     final newModels = _effectiveRenderModels;
     if ((_hasFooter || _showsFooter(oldWidget)) &&
         (oldModels.length != newModels.length ||
-            _hasFooter != _showsFooter(oldWidget))) {
+            _hasFooter != _showsFooter(oldWidget) ||
+            !identical(widget.footer, oldWidget.footer))) {
       for (final index in {
         math.max(0, oldModels.length - 1),
         math.max(0, newModels.length - 1),
@@ -1251,6 +1313,15 @@ class _MessageListViewState extends State<MessageListView> {
       }
     }
     final metricInputsChanged =
+        oldWidget.contextTaskRevision != widget.contextTaskRevision ||
+        !listEquals(
+          oldWidget.contextOperations
+              .map((op) => (op.id, op.revoked, op.anchorGroupId))
+              .toList(),
+          widget.contextOperations
+              .map((op) => (op.id, op.revoked, op.anchorGroupId))
+              .toList(),
+        ) ||
         oldWidget.chatFontScale != widget.chatFontScale ||
         oldWidget.selecting != widget.selecting ||
         oldWidget.showModelIcon != widget.showModelIcon ||
@@ -1639,42 +1710,8 @@ class _MessageListViewState extends State<MessageListView> {
     _scrollIdleTimer?.cancel();
     _deferStreamingMessageUpdates.dispose();
     _keyboardFocusNode.dispose();
+    _uiRegistry.dispose();
     super.dispose();
-  }
-
-  /// Build the context divider widget shown at truncate position.
-  Widget _buildContextDivider(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final cs = Theme.of(context).colorScheme;
-    final label = l10n.homePageClearContext;
-    return Row(
-      children: [
-        Expanded(
-          child: Divider(
-            color: cs.outlineVariant.withValues(alpha: 0.6),
-            height: 1,
-            thickness: 1,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: cs.onSurface.withValues(alpha: 0.6),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Divider(
-            color: cs.outlineVariant.withValues(alpha: 0.6),
-            height: 1,
-            thickness: 1,
-          ),
-        ),
-      ],
-    );
   }
 
   @override
@@ -1727,111 +1764,117 @@ class _MessageListViewState extends State<MessageListView> {
       showTokenStats: widget.showTokenStats,
       assistant: widget.assistant,
     );
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final horizontalPad =
-            ((constraints.maxWidth - ChatLayoutConstants.maxContentWidth) / 2)
-                .clamp(0.0, double.infinity);
+    return UiPersistenceHost(
+      registry: _uiRegistry,
+      conversationId: widget.messages.firstOrNull?.conversationId,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final horizontalPad =
+              ((constraints.maxWidth - ChatLayoutConstants.maxContentWidth) / 2)
+                  .clamp(0.0, double.infinity);
 
-        return Builder(
-          builder: (context) {
-            final list = SuperListView.builder(
-              controller: widget.scrollController,
-              listController: widget.listController,
-              cacheExtent: 600,
-              delayPopulatingCacheArea: false,
-              addRepaintBoundaries: false,
-              findChildIndexCallback: _findMessageIndexByKey,
-              extentEstimation: _estimateItemExtent,
-              padding: EdgeInsets.fromLTRB(
-                horizontalPad,
-                widget.topContentPadding,
-                horizontalPad,
-                widget.bottomContentPadding +
-                    (widget.isPinnedIndicatorActive ? 12 : 0),
-              ),
-              itemCount: _effectiveRenderModels.isEmpty && _hasFooter
-                  ? 1
-                  : _effectiveRenderModels.length,
-              keyboardDismissBehavior: _keyboardDismissBehavior,
-              itemBuilder: (context, index) {
-                if (_effectiveRenderModels.isEmpty && _hasFooter) {
-                  return SizedBox(height: _footerExtent, child: widget.footer);
-                }
-                if (index < 0 || index >= _effectiveRenderModels.length) {
-                  return const SizedBox.shrink();
-                }
-                return _buildMessageItem(
-                  context,
-                  index: index,
-                  presentation: presentation,
-                );
-              },
-            );
+          return Builder(
+            builder: (context) {
+              final list = SuperListView.builder(
+                controller: widget.scrollController,
+                listController: widget.listController,
+                cacheExtent: 600,
+                delayPopulatingCacheArea: false,
+                addRepaintBoundaries: false,
+                findChildIndexCallback: _findMessageIndexByKey,
+                extentEstimation: _estimateItemExtent,
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPad,
+                  widget.topContentPadding,
+                  horizontalPad,
+                  widget.bottomContentPadding +
+                      (widget.isPinnedIndicatorActive ? 12 : 0),
+                ),
+                itemCount: _effectiveRenderModels.isEmpty && _hasFooter
+                    ? 1
+                    : _effectiveRenderModels.length,
+                keyboardDismissBehavior: _keyboardDismissBehavior,
+                itemBuilder: (context, index) {
+                  if (_effectiveRenderModels.isEmpty && _hasFooter) {
+                    return widget.footer!;
+                  }
+                  if (index < 0 || index >= _effectiveRenderModels.length) {
+                    return const SizedBox.shrink();
+                  }
+                  return _buildMessageItem(
+                    context,
+                    index: index,
+                    presentation: presentation,
+                  );
+                },
+              );
 
-            final historyList =
-                NotificationListener<SelectionAutoScrollNotification>(
-                  onNotification: (_) {
-                    _handleUserScrollActivity();
-                    return false;
-                  },
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: _handleScrollNotification,
-                    child: list,
-                  ),
-                );
+              final historyList =
+                  NotificationListener<SelectionAutoScrollNotification>(
+                    onNotification: (_) {
+                      _handleUserScrollActivity();
+                      return false;
+                    },
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: _handleScrollNotification,
+                      child: list,
+                    ),
+                  );
 
-            final userScrollAwareList = Listener(
-              onPointerDown: (event) {
-                // Keep copy shortcuts on a focused text selection when the
-                // second click of a double-click reaches the list.
-                if (_isDesktopPlatform && !_keyboardFocusNode.hasFocus) {
-                  _keyboardFocusNode.requestFocus();
-                }
-                if (event.buttons != 0 &&
-                    event.buttons != kSecondaryMouseButton) {
-                  _pointerDragInProgress = true;
-                  _latestPointerDragMetrics = null;
-                  _setDeferStreamingMessageUpdates(true);
-                }
-              },
-              onPointerUp: (_) => _settlePointerDrag(),
-              onPointerCancel: (_) => _settlePointerDrag(),
-              onPointerSignal: (event) {
-                if (event is PointerScrollEvent) {
-                  _setDeferStreamingMessageUpdates(true);
-                  _schedulePointerScrollActivityCheck();
-                }
-              },
-              child: Focus(
-                key: const ValueKey('timeline-keyboard-scroll-region'),
-                focusNode: _keyboardFocusNode,
-                onKeyEvent: _handleTimelineKeyEvent,
-                child: historyList,
-              ),
-            );
+              final userScrollAwareList = Listener(
+                onPointerDown: (event) {
+                  // Keep copy shortcuts on a focused text selection when the
+                  // second click of a double-click reaches the list.
+                  if (_isDesktopPlatform &&
+                      !_keyboardFocusNode.hasFocus &&
+                      !GenUiControlPointer.contains(event)) {
+                    _keyboardFocusNode.requestFocus();
+                  }
+                  if (event.buttons != 0 &&
+                      event.buttons != kSecondaryMouseButton) {
+                    _pointerDragInProgress = true;
+                    _latestPointerDragMetrics = null;
+                    _setDeferStreamingMessageUpdates(true);
+                  }
+                },
+                onPointerUp: (_) => _settlePointerDrag(),
+                onPointerCancel: (_) => _settlePointerDrag(),
+                onPointerSignal: (event) {
+                  if (event is PointerScrollEvent) {
+                    _setDeferStreamingMessageUpdates(true);
+                    _schedulePointerScrollActivityCheck();
+                  }
+                },
+                child: Focus(
+                  key: const ValueKey('timeline-keyboard-scroll-region'),
+                  focusNode: _keyboardFocusNode,
+                  onKeyEvent: _handleTimelineKeyEvent,
+                  child: historyList,
+                ),
+              );
 
-            return Stack(
-              children: [
-                userScrollAwareList,
-                if (_effectiveRenderModels.isEmpty && widget.isLoadingWindow)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: _WindowLoadingSkeleton(
-                        key: MessageListView.windowSkeletonKey,
-                        horizontalPadding: horizontalPad,
-                        topPadding: widget.topContentPadding,
+              return Stack(
+                children: [
+                  userScrollAwareList,
+                  if (_effectiveRenderModels.isEmpty && widget.isLoadingWindow)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: _WindowLoadingSkeleton(
+                          key: MessageListView.windowSkeletonKey,
+                          horizontalPadding: horizontalPad,
+                          topPadding: widget.topContentPadding,
+                        ),
                       ),
                     ),
-                  ),
-                if (widget.isPinnedIndicatorActive &&
-                    widget.buildPinnedStreamingIndicator != null)
-                  widget.buildPinnedStreamingIndicator!(),
-              ],
-            );
-          },
-        );
-      },
+                  if (widget.isPinnedIndicatorActive &&
+                      widget.buildPinnedStreamingIndicator != null)
+                    widget.buildPinnedStreamingIndicator!(),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -2170,13 +2213,58 @@ class _MessageListViewState extends State<MessageListView> {
             ),
           ],
         ),
-        if (model.showContextDivider)
+        for (final operation in widget.contextOperations)
+          if (!operation.revoked &&
+              operation.anchorGroupId == (message.groupId ?? message.id))
+            Padding(
+              padding: widget.dividerPadding,
+              child: ContextOperationDivider(
+                key: ValueKey('context-node-${operation.id}'),
+                operation: operation,
+                hiddenByClear: widget.contextOperations
+                    .skipWhile((op) => op.id != operation.id)
+                    .skip(1)
+                    .any(
+                      (op) =>
+                          !op.revoked &&
+                          !op.isCompression &&
+                          op.sourceGroups.contains(operation.anchorGroupId),
+                    ),
+                superseded: widget.contextOperations.any(
+                  (other) =>
+                      !other.revoked &&
+                      other.dependencies.contains(operation.id),
+                ),
+                onOpen: () => widget.onOpenContextOperation?.call(operation),
+                onUndo: widget.onUndoContextOperation == null
+                    ? null
+                    : () => widget.onUndoContextOperation!(operation),
+              ),
+            ),
+        if (_taskAt(index))
           Padding(
             padding: widget.dividerPadding,
-            child: _buildContextDivider(context),
+            child: Builder(
+              builder: (anchorContext) => ContextOperationDivider.task(
+                key: ValueKey('context-task-${widget.contextTask!.id}'),
+                task: widget.contextTask!,
+                waitingForApproval: widget.contextTaskWaitingForApproval,
+                onOpen: () {
+                  final box = anchorContext.findRenderObject() as RenderBox?;
+                  if (box != null) {
+                    widget.onOpenContextTask?.call(
+                      widget.contextTask!,
+                      box.localToGlobal(
+                        Offset(box.size.width / 2, box.size.height),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
           ),
         if (_hasFooter && index == _effectiveRenderModels.length - 1)
-          SizedBox(height: _footerExtent, child: widget.footer),
+          widget.footer!,
       ],
     );
     final isSpotlight =
@@ -2443,8 +2531,6 @@ class _MessageListViewState extends State<MessageListView> {
           widget.onEditMessage?.call(message);
         } else if (action == MessageMoreAction.fork) {
           await widget.onForkConversation?.call(message);
-        } else if (action == MessageMoreAction.share) {
-          widget.onShareMessage?.call(index, widget.messages);
         } else if (action == MessageMoreAction.selectMessages) {
           widget.onSelectMessages?.call(index, widget.messages);
         }

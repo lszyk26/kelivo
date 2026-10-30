@@ -6,6 +6,7 @@ import 'package:Kelivo/shared/widgets/export_capture_scope.dart';
 import 'markdown_surface_scope.dart';
 import 'package:Kelivo/core/providers/settings_provider.dart';
 import 'package:Kelivo/theme/app_font_weights.dart';
+import 'package:Kelivo/theme/surface_ladder.dart' show atTone, surfaceTone;
 import 'package:Kelivo/theme/theme_factory.dart' show getPlatformFontFallback;
 
 MarkstreamTheme mapMarkdownTheme(
@@ -42,15 +43,21 @@ MarkstreamTheme mapMarkdownTheme(
       context,
     )?.customBackground;
     if (customBackground != null) {
-      // Only explicit bubble overrides need a local scheme. Pair the fill and
-      // syntax brightness with that background, not the surrounding app theme.
+      // Fixed syntax colors need a near-dark or near-light block surface, even
+      // over arbitrary wallpaper. Retain the bubble's hue, not its midtones.
+      final tone = surfaceTone(customBackground);
+      final dark = tone < 50;
+      final blockTone = dark ? tone.clamp(0.0, 5.0) : tone.clamp(98.0, 100.0);
       scheme = scheme.copyWith(
-        surface: customBackground,
-        brightness: ThemeData.estimateBrightnessForColor(customBackground),
+        surface: blockTone == tone
+            ? customBackground
+            : atTone(customBackground, blockTone),
+        onSurface: dark ? Colors.white : Colors.black,
+        brightness: dark ? Brightness.dark : Brightness.light,
       );
     }
   }
-  return MarkstreamTheme.fromColorScheme(
+  final theme = MarkstreamTheme.fromColorScheme(
     scheme,
     backdrop: backdrop,
     maskStrength: backdrop == MarkstreamBackdrop.plain
@@ -65,6 +72,27 @@ MarkstreamTheme mapMarkdownTheme(
     semibold: AppFontWeights.semibold,
     strong: AppFontWeights.strong,
   );
+  if (!settings.useLegacyInlineCodeStyle) return theme;
+  final translucent =
+      backdrop == MarkstreamBackdrop.wallpaper ||
+      backdrop == MarkstreamBackdrop.frostedBubble;
+  return theme.copyWith(
+    inlineCode: theme.inlineCode.copyWith(
+      text: theme.inlineCode.text.copyWith(
+        height: 1.4,
+        color: theme.colors.ink,
+      ),
+      // Keep short code within the paragraph's line height while giving
+      // wrapped code room between lines.
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      backgroundColor: translucent
+          ? theme.colors.fillBlock
+          : theme.brightness == Brightness.dark
+          ? Colors.white12
+          : const Color(0x66F1F3F5),
+      borderColor: theme.colors.border,
+    ),
+  );
 }
 
 MarkstreamBackdrop resolveMarkdownBackdrop(
@@ -77,10 +105,9 @@ MarkstreamBackdrop resolveMarkdownBackdrop(
   final scope = ChatFrostedBackdropScope.maybeOf(context);
   if (scope == null || !scope.backgroundActive) return MarkstreamBackdrop.plain;
   final surface = MarkdownSurfaceScope.maybeOf(context);
-  // An explicit bubble color can invert the syntax theme. Its translucent
-  // surface needs enough coverage for those fixed syntax colors as well.
-  if (surface?.customBackground != null &&
-      surface!.kind != MarkdownSurfaceKind.solid) {
+  // Custom bubbles need the readable block fill even when the outer bubble is
+  // opaque: a small tint cannot shield fixed syntax colors from a midtone.
+  if (surface?.customBackground != null) {
     return MarkstreamBackdrop.wallpaper;
   }
   return switch (surface?.kind) {

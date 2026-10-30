@@ -313,7 +313,7 @@ abstract class AppLocalizations {
   /// No description provided for @storageSpaceLoadFailed.
   ///
   /// In en, this message translates to:
-  /// **'Failed to load storage usage'**
+  /// **'Could not load files or check which images are in use. Please refresh and try again.'**
   String get storageSpaceLoadFailed;
 
   /// No description provided for @storageSpaceTotalLabel.
@@ -436,12 +436,6 @@ abstract class AppLocalizations {
   /// **'Completed restore snapshots'**
   String get storageSpaceSubCompletedRestoreRuns;
 
-  /// No description provided for @storageSpaceCategoryAssistantData.
-  ///
-  /// In en, this message translates to:
-  /// **'Assistants'**
-  String get storageSpaceCategoryAssistantData;
-
   /// No description provided for @storageSpaceCategoryCache.
   ///
   /// In en, this message translates to:
@@ -519,18 +513,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shared memory index'**
   String get storageSpaceSubChatSharedMemory;
-
-  /// No description provided for @storageSpaceSubAssistantAvatars.
-  ///
-  /// In en, this message translates to:
-  /// **'Avatars'**
-  String get storageSpaceSubAssistantAvatars;
-
-  /// No description provided for @storageSpaceSubAssistantImages.
-  ///
-  /// In en, this message translates to:
-  /// **'Images'**
-  String get storageSpaceSubAssistantImages;
 
   /// No description provided for @storageSpaceSubCacheAvatars.
   ///
@@ -705,30 +687,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} items'**
   String storageSpaceUploadsCount(int count);
-
-  /// No description provided for @storageSpaceSourceLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Source'**
-  String get storageSpaceSourceLabel;
-
-  /// No description provided for @storageSpaceSourceAll.
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get storageSpaceSourceAll;
-
-  /// No description provided for @storageSpaceSourceUserUpload.
-  ///
-  /// In en, this message translates to:
-  /// **'User uploads'**
-  String get storageSpaceSourceUserUpload;
-
-  /// No description provided for @storageSpaceSourceAssistant.
-  ///
-  /// In en, this message translates to:
-  /// **'Assistant'**
-  String get storageSpaceSourceAssistant;
 
   /// No description provided for @storageSpaceSortLabel.
   ///
@@ -2980,6 +2938,36 @@ abstract class AppLocalizations {
   /// **'At least one assistant is required'**
   String get assistantSettingsAtLeastOneAssistantRequired;
 
+  /// No description provided for @assistantConversationMcpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow per-conversation MCP'**
+  String get assistantConversationMcpTitle;
+
+  /// No description provided for @assistantConversationMcpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Let conversations choose their own MCP servers. Conversations use the assistant’s selection until customized.'**
+  String get assistantConversationMcpHint;
+
+  /// No description provided for @mcpSelectionInherited.
+  ///
+  /// In en, this message translates to:
+  /// **'Following assistant'**
+  String get mcpSelectionInherited;
+
+  /// No description provided for @mcpSelectionCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom for this chat'**
+  String get mcpSelectionCustom;
+
+  /// No description provided for @mcpInheritAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Use assistant settings'**
+  String get mcpInheritAssistant;
+
   /// No description provided for @mcpAssistantSheetTitle.
   ///
   /// In en, this message translates to:
@@ -4072,6 +4060,12 @@ abstract class AppLocalizations {
   /// **'Local Backup'**
   String get backupPageLocalBackup;
 
+  /// No description provided for @backupPageIosSystemBackupNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Kelivo\'s local data is set to be excluded from iCloud device backups. Export a backup file before changing devices or deleting the app.'**
+  String get backupPageIosSystemBackupNote;
+
   /// No description provided for @backupPageImportFromCherryStudio.
   ///
   /// In en, this message translates to:
@@ -4423,7 +4417,7 @@ abstract class AppLocalizations {
   /// No description provided for @compressContextDesc.
   ///
   /// In en, this message translates to:
-  /// **'Summarize and start a new chat'**
+  /// **'Create a summary you can review and undo'**
   String get compressContextDesc;
 
   /// No description provided for @clearContextDesc.
@@ -4437,12 +4431,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Context Management'**
   String get contextManagement;
-
-  /// No description provided for @compressingContext.
-  ///
-  /// In en, this message translates to:
-  /// **'Compressing context...'**
-  String get compressingContext;
 
   /// No description provided for @compressContextFailed.
   ///
@@ -4483,25 +4471,25 @@ abstract class AppLocalizations {
   /// No description provided for @compressContextOptionsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Choose which part of the current chat is sent to the compression model.'**
+  /// **'Create an editable, reversible summary in this chat. Original messages are kept.'**
   String get compressContextOptionsDesc;
 
   /// No description provided for @compressContextKeepStart.
   ///
   /// In en, this message translates to:
-  /// **'Start'**
+  /// **'Start sample'**
   String get compressContextKeepStart;
 
   /// No description provided for @compressContextKeepRecent.
   ///
   /// In en, this message translates to:
-  /// **'Recent'**
+  /// **'End sample'**
   String get compressContextKeepRecent;
 
   /// No description provided for @compressContextUnlimited.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited'**
+  /// **'All content'**
   String get compressContextUnlimited;
 
   /// No description provided for @compressContextMaxCharsLabel.
@@ -4543,7 +4531,7 @@ abstract class AppLocalizations {
   /// No description provided for @compressContextKeepCountLabel.
   ///
   /// In en, this message translates to:
-  /// **'Keep recent messages'**
+  /// **'Recent user messages'**
   String get compressContextKeepCountLabel;
 
   /// No description provided for @compressContextKeepAllMessages.
@@ -5253,6 +5241,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Render LaTeX math (inline and block)'**
   String get displaySettingsPageEnableMathSubtitle;
+
+  /// No description provided for @displaySettingsPageUseLegacyInlineCodeStyleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Legacy inline code style'**
+  String get displaySettingsPageUseLegacyInlineCodeStyleTitle;
+
+  /// No description provided for @displaySettingsPageUseLegacyInlineCodeStyleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a lighter background, a thin border, and more line spacing for inline code.'**
+  String get displaySettingsPageUseLegacyInlineCodeStyleSubtitle;
 
   /// No description provided for @displaySettingsPageEnableUserMarkdownTitle.
   ///
@@ -7260,6 +7260,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'thinking + output_config.effort'**
   String get modelSpecFormDialectAnthropicAdaptiveEffortSubtitle;
+
+  /// No description provided for @modelSpecFormDialectAnthropicBetweenTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Anthropic adaptive / between_tools'**
+  String get modelSpecFormDialectAnthropicBetweenTools;
+
+  /// No description provided for @modelSpecFormDialectAnthropicBetweenToolsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adaptive thinking; Off uses between_tools'**
+  String get modelSpecFormDialectAnthropicBetweenToolsSubtitle;
 
   /// No description provided for @modelSpecFormDialectAnthropicEffort.
   ///
@@ -9643,18 +9655,6 @@ abstract class AppLocalizations {
   /// **'Show the current level next to the reasoning icon in the input bar'**
   String get displaySettingsShowReasoningLevelBadgeSubtitle;
 
-  /// No description provided for @displaySettingsPageIosNativeSelectionMenuTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'iOS 26+ native selection menu'**
-  String get displaySettingsPageIosNativeSelectionMenuTitle;
-
-  /// No description provided for @displaySettingsPageIosNativeSelectionMenuSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Applies to input and messages. Turn off if menus feel slow.'**
-  String get displaySettingsPageIosNativeSelectionMenuSubtitle;
-
   /// No description provided for @displaySettingsPageAutoCollapseThinkingTitle.
   ///
   /// In en, this message translates to:
@@ -10006,20 +10006,8 @@ abstract class AppLocalizations {
   /// No description provided for @displaySettingsPageAutoScrollEnableTitle.
   ///
   /// In en, this message translates to:
-  /// **'Auto-scroll to bottom'**
+  /// **'Auto-follow bottom'**
   String get displaySettingsPageAutoScrollEnableTitle;
-
-  /// No description provided for @displaySettingsPageAutoScrollIdleTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto-Scroll Back Delay'**
-  String get displaySettingsPageAutoScrollIdleTitle;
-
-  /// No description provided for @displaySettingsPageAutoScrollIdleSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Wait time after user scroll before jumping to bottom'**
-  String get displaySettingsPageAutoScrollIdleSubtitle;
 
   /// No description provided for @displaySettingsPageAutoScrollDisabledLabel.
   ///
@@ -10477,6 +10465,12 @@ abstract class AppLocalizations {
   /// **'Voxtral segmented transcription'**
   String get asrServicesMistralSubtitle;
 
+  /// No description provided for @asrServicesElevenLabsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scribe segmented transcription'**
+  String get asrServicesElevenLabsSubtitle;
+
   /// No description provided for @asrServicesDashScopeTitle.
   ///
   /// In en, this message translates to:
@@ -10596,6 +10590,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Endpoint'**
   String get asrServicesEndpointLabel;
+
+  /// No description provided for @asrServicesRecognitionModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognition mode'**
+  String get asrServicesRecognitionModeLabel;
+
+  /// No description provided for @asrServicesRealtimeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time'**
+  String get asrServicesRealtimeMode;
+
+  /// No description provided for @asrServicesRecordedMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded audio'**
+  String get asrServicesRecordedMode;
+
+  /// No description provided for @asrServicesQwenAudioSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-time or recorded audio transcription'**
+  String get asrServicesQwenAudioSubtitle;
+
+  /// No description provided for @asrServicesQwenTokenPlanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For Token Plan, choose Recorded audio, enter token-plan as the Workspace ID, and select the region for your key.'**
+  String get asrServicesQwenTokenPlanHint;
+
+  /// No description provided for @asrServicesEndpointOverrideLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom endpoint (optional)'**
+  String get asrServicesEndpointOverrideLabel;
+
+  /// No description provided for @asrServicesWorkspaceIdInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a workspace ID, not a URL.'**
+  String get asrServicesWorkspaceIdInvalid;
+
+  /// No description provided for @asrServicesWebSocketEndpointInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a complete ws:// or wss:// endpoint without credentials or a fragment.'**
+  String get asrServicesWebSocketEndpointInvalid;
+
+  /// No description provided for @asrServicesHttpEndpointInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a complete http:// or https:// endpoint without credentials or a fragment.'**
+  String get asrServicesHttpEndpointInvalid;
 
   /// No description provided for @asrServicesModelLabel.
   ///
@@ -15541,12 +15589,6 @@ abstract class AppLocalizations {
   /// **'Waiting for approval'**
   String get toolApprovalPending;
 
-  /// No description provided for @toolApprovalApprove.
-  ///
-  /// In en, this message translates to:
-  /// **'Approve'**
-  String get toolApprovalApprove;
-
   /// No description provided for @toolApprovalDeny.
   ///
   /// In en, this message translates to:
@@ -17935,12 +17977,6 @@ abstract class AppLocalizations {
   /// **'image'**
   String get workspaceToolImageTag;
 
-  /// No description provided for @workspaceToolAllowAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Allow all this session'**
-  String get workspaceToolAllowAll;
-
   /// No description provided for @workspaceToolStdout.
   ///
   /// In en, this message translates to:
@@ -18472,7 +18508,7 @@ abstract class AppLocalizations {
   /// No description provided for @workspaceEnvNativeShellApproval.
   ///
   /// In en, this message translates to:
-  /// **'The shell tool needs approval unless this session allows all tools.'**
+  /// **'The shell tool needs approval in Ask for approval mode.'**
   String get workspaceEnvNativeShellApproval;
 
   /// No description provided for @workspaceEnvDownloadProgress.
@@ -18994,18 +19030,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Skills'**
   String get workspaceEntrySessionSkills;
-
-  /// No description provided for @workspaceEntryAllowAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Allow all this session'**
-  String get workspaceEntryAllowAll;
-
-  /// No description provided for @workspaceEntryAllowAllSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Shell commands in this conversation will run without approval.'**
-  String get workspaceEntryAllowAllSubtitle;
 
   /// No description provided for @workspaceEntryEnvironment.
   ///
@@ -19884,7 +19908,7 @@ abstract class AppLocalizations {
   /// No description provided for @workspaceEnvNativeUnsandboxed.
   ///
   /// In en, this message translates to:
-  /// **'Commands run on this computer, not in a sandbox, and need approval unless this session allows all tools.'**
+  /// **'Commands run on this computer without a sandbox and need approval unless this chat has full access.'**
   String get workspaceEnvNativeUnsandboxed;
 
   /// No description provided for @workspaceEnvRootfsTitle.
@@ -22422,7 +22446,7 @@ abstract class AppLocalizations {
   /// No description provided for @oauthModelsHint.
   ///
   /// In en, this message translates to:
-  /// **'Available models are synced from your account.'**
+  /// **'Available models are synced from your account. Choose which models appear in the model picker. Your choices are kept when syncing or signing in again.'**
   String get oauthModelsHint;
 
   /// No description provided for @oauthNoModels.
@@ -23727,13 +23751,13 @@ abstract class AppLocalizations {
   /// No description provided for @backupEncryptionOnHint.
   ///
   /// In en, this message translates to:
-  /// **'Backups are encrypted while this page stays open.'**
+  /// **'Backups are encrypted. Enter the password again after restarting the app.'**
   String get backupEncryptionOnHint;
 
   /// No description provided for @backupEncryptionPasswordHint.
   ///
   /// In en, this message translates to:
-  /// **'Keep this password safe. If you lose it, the backup cannot be restored. It is kept only while this page is open.'**
+  /// **'Keep this password safe. If you lose it, the backup cannot be restored. It is kept in memory until you exit the app.'**
   String get backupEncryptionPasswordHint;
 
   /// No description provided for @backupEncryptionPassword.
@@ -24851,6 +24875,2700 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI is using this page. Select Take over to interact.'**
   String get browserObserverHint;
+
+  /// No description provided for @genuiSurfaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive UI'**
+  String get genuiSurfaceTitle;
+
+  /// No description provided for @genuiStatusStreaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating'**
+  String get genuiStatusStreaming;
+
+  /// No description provided for @genuiStatusInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupted'**
+  String get genuiStatusInterrupted;
+
+  /// No description provided for @genuiStatusUnsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved'**
+  String get genuiStatusUnsaved;
+
+  /// No description provided for @genuiStatusUnsavedRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to retry saving'**
+  String get genuiStatusUnsavedRetry;
+
+  /// No description provided for @genuiReadOnlyUntilComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Available when generation finishes'**
+  String get genuiReadOnlyUntilComplete;
+
+  /// No description provided for @genuiReadOnlySnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only snapshot'**
+  String get genuiReadOnlySnapshot;
+
+  /// No description provided for @genuiPendingNode.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {id}'**
+  String genuiPendingNode(String id);
+
+  /// No description provided for @genuiViewSource.
+  ///
+  /// In en, this message translates to:
+  /// **'View source'**
+  String get genuiViewSource;
+
+  /// No description provided for @genuiCopySource.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy source'**
+  String get genuiCopySource;
+
+  /// No description provided for @genuiExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand'**
+  String get genuiExpand;
+
+  /// No description provided for @genuiExpandedStub.
+  ///
+  /// In en, this message translates to:
+  /// **'Being edited in expanded view'**
+  String get genuiExpandedStub;
+
+  /// No description provided for @genuiMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get genuiMore;
+
+  /// No description provided for @genuiReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to defaults'**
+  String get genuiReset;
+
+  /// No description provided for @genuiRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair UI'**
+  String get genuiRepair;
+
+  /// No description provided for @genuiInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This UI can\'t be displayed'**
+  String get genuiInvalidTitle;
+
+  /// No description provided for @genuiNodesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 node can\'t be displayed} other{{count} nodes can\'t be displayed}}'**
+  String genuiNodesFailed(int count);
+
+  /// No description provided for @genuiErrorLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line {line}'**
+  String genuiErrorLine(int line);
+
+  /// No description provided for @genuiValueUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No value'**
+  String get genuiValueUnavailable;
+
+  /// No description provided for @genuiFormulaInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This formula can\'t be displayed'**
+  String get genuiFormulaInvalid;
+
+  /// No description provided for @genuiNodeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This component is unavailable'**
+  String get genuiNodeUnavailable;
+
+  /// No description provided for @genuiErrorHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid UI header'**
+  String get genuiErrorHeader;
+
+  /// No description provided for @genuiErrorVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported UI language version'**
+  String get genuiErrorVersion;
+
+  /// No description provided for @genuiErrorCatalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported component catalog'**
+  String get genuiErrorCatalog;
+
+  /// No description provided for @genuiErrorRoot.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing or invalid root component'**
+  String get genuiErrorRoot;
+
+  /// No description provided for @genuiErrorSyntax.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid declaration syntax'**
+  String get genuiErrorSyntax;
+
+  /// No description provided for @genuiErrorDuplicateSymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'A name is defined more than once'**
+  String get genuiErrorDuplicateSymbol;
+
+  /// No description provided for @genuiErrorDuplicateProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'A property is defined more than once'**
+  String get genuiErrorDuplicateProperty;
+
+  /// No description provided for @genuiErrorReservedName.
+  ///
+  /// In en, this message translates to:
+  /// **'This name is reserved'**
+  String get genuiErrorReservedName;
+
+  /// No description provided for @genuiErrorUnknownComponent.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown component {detail}'**
+  String genuiErrorUnknownComponent(String detail);
+
+  /// No description provided for @genuiErrorUnknownProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown property {detail}'**
+  String genuiErrorUnknownProperty(String detail);
+
+  /// No description provided for @genuiErrorMissingProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Required property {detail} is missing'**
+  String genuiErrorMissingProperty(String detail);
+
+  /// No description provided for @genuiErrorBinding.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid writable input binding'**
+  String get genuiErrorBinding;
+
+  /// No description provided for @genuiErrorReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid component reference'**
+  String get genuiErrorReference;
+
+  /// No description provided for @genuiErrorMissingReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Referenced content has not been defined'**
+  String get genuiErrorMissingReference;
+
+  /// No description provided for @genuiErrorDependency.
+  ///
+  /// In en, this message translates to:
+  /// **'Required content cannot be displayed'**
+  String get genuiErrorDependency;
+
+  /// No description provided for @genuiErrorCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Circular references are not supported'**
+  String get genuiErrorCycle;
+
+  /// No description provided for @genuiErrorDuplicateParent.
+  ///
+  /// In en, this message translates to:
+  /// **'A component cannot have two parents'**
+  String get genuiErrorDuplicateParent;
+
+  /// No description provided for @genuiErrorUnreachableNode.
+  ///
+  /// In en, this message translates to:
+  /// **'This component is outside the root tree'**
+  String get genuiErrorUnreachableNode;
+
+  /// No description provided for @genuiErrorType.
+  ///
+  /// In en, this message translates to:
+  /// **'Value has an incompatible type'**
+  String get genuiErrorType;
+
+  /// No description provided for @genuiErrorValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value is outside the supported options or range'**
+  String get genuiErrorValue;
+
+  /// No description provided for @genuiErrorSourceBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'UI source exceeds the size limit'**
+  String get genuiErrorSourceBudget;
+
+  /// No description provided for @genuiErrorDeclarationBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'A declaration exceeds the size limit'**
+  String get genuiErrorDeclarationBudget;
+
+  /// No description provided for @genuiErrorDeclarationCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many declarations'**
+  String get genuiErrorDeclarationCount;
+
+  /// No description provided for @genuiErrorComponentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many components'**
+  String get genuiErrorComponentCount;
+
+  /// No description provided for @genuiErrorInputCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many inputs'**
+  String get genuiErrorInputCount;
+
+  /// No description provided for @genuiErrorComponentDepth.
+  ///
+  /// In en, this message translates to:
+  /// **'Components are nested too deeply'**
+  String get genuiErrorComponentDepth;
+
+  /// No description provided for @genuiErrorExpressionDepth.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation is nested too deeply'**
+  String get genuiErrorExpressionDepth;
+
+  /// No description provided for @genuiErrorFunction.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown calculation function'**
+  String get genuiErrorFunction;
+
+  /// No description provided for @genuiErrorAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported action'**
+  String get genuiErrorAction;
+
+  /// No description provided for @genuiErrorNestedSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Nested sampling is not supported'**
+  String get genuiErrorNestedSample;
+
+  /// No description provided for @genuiErrorSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid sampling range or count'**
+  String get genuiErrorSample;
+
+  /// No description provided for @genuiErrorDataBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Data exceeds the supported size'**
+  String get genuiErrorDataBudget;
+
+  /// No description provided for @genuiErrorRowKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Rows need unique nonempty keys'**
+  String get genuiErrorRowKey;
+
+  /// No description provided for @genuiErrorDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'The value is outside the function domain'**
+  String get genuiErrorDomain;
+
+  /// No description provided for @genuiErrorDivisionByZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Division by zero is undefined'**
+  String get genuiErrorDivisionByZero;
+
+  /// No description provided for @genuiErrorNonFinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation produced a nonfinite number'**
+  String get genuiErrorNonFinite;
+
+  /// No description provided for @genuiErrorOperationsBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation exceeded the operation limit'**
+  String get genuiErrorOperationsBudget;
+
+  /// No description provided for @genuiMetricTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Change {value}'**
+  String genuiMetricTrend(String value);
+
+  /// No description provided for @genuiFormErrorsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 field needs attention} other{{count} fields need attention}}'**
+  String genuiFormErrorsLeft(int count);
+
+  /// No description provided for @genuiFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get genuiFieldRequired;
+
+  /// No description provided for @genuiNumberRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Range {min}–{max}'**
+  String genuiNumberRange(String min, String max);
+
+  /// No description provided for @genuiNumberMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum {min}'**
+  String genuiNumberMinimum(String min);
+
+  /// No description provided for @genuiNumberMaximum.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum {max}'**
+  String genuiNumberMaximum(String max);
+
+  /// No description provided for @genuiFieldTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {min} characters'**
+  String genuiFieldTooShort(int min);
+
+  /// No description provided for @genuiFieldTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'At most {max} characters'**
+  String genuiFieldTooLong(int max);
+
+  /// No description provided for @genuiInvalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a complete finite number'**
+  String get genuiInvalidNumber;
+
+  /// No description provided for @genuiChooseOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an option'**
+  String get genuiChooseOption;
+
+  /// No description provided for @genuiFinishComposing.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish composing before continuing'**
+  String get genuiFinishComposing;
+
+  /// No description provided for @genuiActionDisabledDep.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled: depends on {id}, which can\'t be displayed'**
+  String genuiActionDisabledDep(String id);
+
+  /// No description provided for @genuiActionUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This action isn\'t available in this view'**
+  String get genuiActionUnavailable;
+
+  /// No description provided for @genuiActionDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled by this UI'**
+  String get genuiActionDisabled;
+
+  /// No description provided for @genuiFormUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This form contains content that can\'t be displayed'**
+  String get genuiFormUnavailable;
+
+  /// No description provided for @genuiDecrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease {label}'**
+  String genuiDecrease(String label);
+
+  /// No description provided for @genuiIncrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase {label}'**
+  String genuiIncrease(String label);
+
+  /// No description provided for @genuiCharacterCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} / {max} characters'**
+  String genuiCharacterCount(int used, int max);
+
+  /// No description provided for @genuiBlockLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 3 UI blocks per message; the rest are shown as source'**
+  String get genuiBlockLimit;
+
+  /// No description provided for @genuiChartLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line chart'**
+  String get genuiChartLine;
+
+  /// No description provided for @genuiChartArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area chart'**
+  String get genuiChartArea;
+
+  /// No description provided for @genuiChartBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Bar chart'**
+  String get genuiChartBar;
+
+  /// No description provided for @genuiChartScatter.
+  ///
+  /// In en, this message translates to:
+  /// **'Scatter plot'**
+  String get genuiChartScatter;
+
+  /// No description provided for @genuiChartPie.
+  ///
+  /// In en, this message translates to:
+  /// **'Pie chart'**
+  String get genuiChartPie;
+
+  /// No description provided for @genuiChartDonut.
+  ///
+  /// In en, this message translates to:
+  /// **'Donut chart'**
+  String get genuiChartDonut;
+
+  /// No description provided for @genuiChartEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No data in this range'**
+  String get genuiChartEmpty;
+
+  /// No description provided for @genuiChartAllHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'All series are hidden. Use the legend to show one.'**
+  String get genuiChartAllHidden;
+
+  /// No description provided for @genuiChartSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind}, {series, plural, =1{1 series} other{{series} series}}, {points, plural, =1{1 data row} other{{points} data rows}}, {missing, plural, =1{1 missing value} other{{missing} missing values}} (not connected or replaced with zero).'**
+  String genuiChartSummary(String kind, int series, int points, int missing);
+
+  /// No description provided for @genuiChartPieSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{kind}, {count, plural, =1{1 item} other{{count} items}}, total {total}.'**
+  String genuiChartPieSummary(String kind, int count, String total);
+
+  /// No description provided for @genuiChartDomainGap.
+  ///
+  /// In en, this message translates to:
+  /// **'Undefined'**
+  String get genuiChartDomainGap;
+
+  /// No description provided for @genuiChartDomainSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 sampled point is undefined} other{{count} sampled points are undefined}}; shaded gaps are not connected.'**
+  String genuiChartDomainSummary(int count);
+
+  /// No description provided for @genuiChartShowSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Show {name}'**
+  String genuiChartShowSeries(String name);
+
+  /// No description provided for @genuiChartHideSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide {name}'**
+  String genuiChartHideSeries(String name);
+
+  /// No description provided for @genuiChartKeyboardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Left and right select a data row. Up and down select a series. Escape clears selection.'**
+  String get genuiChartKeyboardHint;
+
+  /// No description provided for @genuiChartTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get genuiChartTotal;
+
+  /// No description provided for @genuiChartFieldsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an X field and one to four distinct Y fields.'**
+  String get genuiChartFieldsError;
+
+  /// No description provided for @genuiChartRecordsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Chart data must be a list of records.'**
+  String get genuiChartRecordsError;
+
+  /// No description provided for @genuiChartXError.
+  ///
+  /// In en, this message translates to:
+  /// **'X values must all be numbers or all be text. Scatter plots require numbers.'**
+  String get genuiChartXError;
+
+  /// No description provided for @genuiChartYError.
+  ///
+  /// In en, this message translates to:
+  /// **'Y fields must exist and contain numbers or missing values.'**
+  String get genuiChartYError;
+
+  /// No description provided for @genuiChartPieError.
+  ///
+  /// In en, this message translates to:
+  /// **'Pie values must be nonnegative and have a finite total greater than zero.'**
+  String get genuiChartPieError;
+
+  /// No description provided for @genuiChartMissingValues.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 value is missing; it is not replaced with zero.} other{{count} values are missing; they are not replaced with zero.}}'**
+  String genuiChartMissingValues(int count);
+
+  /// No description provided for @genuiChartNoVisibleValues.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected series have no values to plot.'**
+  String get genuiChartNoVisibleValues;
+
+  /// No description provided for @genuiChartUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit: {unit}'**
+  String genuiChartUnit(String unit);
+
+  /// No description provided for @genuiSomeValuesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Some values are unavailable'**
+  String get genuiSomeValuesUnavailable;
+
+  /// No description provided for @genuiViewChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Chart'**
+  String get genuiViewChart;
+
+  /// No description provided for @genuiViewData.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get genuiViewData;
+
+  /// No description provided for @genuiTableFilterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter visible text'**
+  String get genuiTableFilterHint;
+
+  /// No description provided for @genuiTableRows.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 row} other{{count} rows}}'**
+  String genuiTableRows(int count);
+
+  /// No description provided for @genuiTablePageInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Rows {from}–{to} of {total}'**
+  String genuiTablePageInfo(int from, int to, int total);
+
+  /// No description provided for @genuiTablePerPage.
+  ///
+  /// In en, this message translates to:
+  /// **'{n}/page'**
+  String genuiTablePerPage(int n);
+
+  /// No description provided for @genuiTableEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching rows'**
+  String get genuiTableEmpty;
+
+  /// No description provided for @genuiSortAsc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorted ascending'**
+  String get genuiSortAsc;
+
+  /// No description provided for @genuiSortDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorted descending'**
+  String get genuiSortDesc;
+
+  /// No description provided for @genuiSortNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sorted'**
+  String get genuiSortNone;
+
+  /// No description provided for @genuiValueTrue.
+  ///
+  /// In en, this message translates to:
+  /// **'True'**
+  String get genuiValueTrue;
+
+  /// No description provided for @genuiValueFalse.
+  ///
+  /// In en, this message translates to:
+  /// **'False'**
+  String get genuiValueFalse;
+
+  /// No description provided for @genuiTablePreviousPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous page'**
+  String get genuiTablePreviousPage;
+
+  /// No description provided for @genuiTableNextPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Next page'**
+  String get genuiTableNextPage;
+
+  /// No description provided for @genuiTableCellsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Table data must contain records with finite scalar values or missing values.'**
+  String get genuiTableCellsError;
+
+  /// No description provided for @genuiTableColumnsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one to eight distinct fields with labels and optional digits from 0 to 10.'**
+  String get genuiTableColumnsError;
+
+  /// No description provided for @genuiTableRowKeyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Every row needs a non-null scalar key.'**
+  String get genuiTableRowKeyError;
+
+  /// No description provided for @genuiViewStateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This view change exceeds the saved state limit. Shorten a field or reset the UI and try again.'**
+  String get genuiViewStateFailed;
+
+  /// No description provided for @genuiAttachState.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach current state'**
+  String get genuiAttachState;
+
+  /// No description provided for @genuiChipExactText.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact text to be sent (frozen)'**
+  String get genuiChipExactText;
+
+  /// No description provided for @genuiChipStale.
+  ///
+  /// In en, this message translates to:
+  /// **'Source unavailable — remove or attach again'**
+  String get genuiChipStale;
+
+  /// No description provided for @genuiChipRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove attached UI'**
+  String get genuiChipRemove;
+
+  /// No description provided for @genuiReplaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace attached UI?'**
+  String get genuiReplaceTitle;
+
+  /// No description provided for @genuiReplaceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A draft can carry one UI state.'**
+  String get genuiReplaceBody;
+
+  /// No description provided for @genuiReplaceCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get genuiReplaceCurrent;
+
+  /// No description provided for @genuiReplaceNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace with'**
+  String get genuiReplaceNew;
+
+  /// No description provided for @genuiReplaceConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get genuiReplaceConfirm;
+
+  /// No description provided for @genuiMergeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to your draft?'**
+  String get genuiMergeTitle;
+
+  /// No description provided for @genuiMergeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get genuiMergeConfirm;
+
+  /// No description provided for @genuiContextEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No parameter or result fields are attached.'**
+  String get genuiContextEmpty;
+
+  /// No description provided for @genuiContextOmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'[Some fields or data rows are omitted.]'**
+  String get genuiContextOmitted;
+
+  /// No description provided for @genuiChipOmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'The previously attached UI state is unavailable and was not included.'**
+  String get genuiChipOmitted;
+
+  /// No description provided for @genuiDraftChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Your draft changed. Try attaching again.'**
+  String get genuiDraftChanged;
+
+  /// No description provided for @genuiRepairDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Please repair this interface using the diagnostics and source excerpts below.'**
+  String get genuiRepairDraft;
+
+  /// No description provided for @genuiCopySourceMarkdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy source / Markdown'**
+  String get genuiCopySourceMarkdown;
+
+  /// No description provided for @genuiTextFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The interface state could not be read. Try again.'**
+  String get genuiTextFailed;
+
+  /// No description provided for @genuiCopyLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Text exceeds the 64 KiB copy limit. Select a smaller section.'**
+  String get genuiCopyLimit;
+
+  /// No description provided for @genuiExportSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Export read-only snapshot'**
+  String get genuiExportSnapshot;
+
+  /// No description provided for @genuiExpandedSharedState.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares the same state as the message'**
+  String get genuiExpandedSharedState;
+
+  /// No description provided for @genuiExportTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'This image exceeds 16 megapixels. Select fewer messages or export a smaller UI.'**
+  String get genuiExportTooLarge;
+
+  /// No description provided for @genuiWebTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Web preview'**
+  String get genuiWebTitle;
+
+  /// No description provided for @genuiWebOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get genuiWebOpen;
+
+  /// No description provided for @genuiWebNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be opened after generation finishes'**
+  String get genuiWebNotReady;
+
+  /// No description provided for @genuiWebInvalidMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid header; not loaded'**
+  String get genuiWebInvalidMeta;
+
+  /// No description provided for @genuiWebSandboxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sandboxed preview · discarded on close'**
+  String get genuiWebSandboxNote;
+
+  /// No description provided for @genuiWebUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Web previews aren\'t supported on this platform. Export to open in a browser.'**
+  String get genuiWebUnsupported;
+
+  /// No description provided for @genuiWebExportHtml.
+  ///
+  /// In en, this message translates to:
+  /// **'Export HTML'**
+  String get genuiWebExportHtml;
+
+  /// No description provided for @genuiWebInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview information'**
+  String get genuiWebInfo;
+
+  /// No description provided for @genuiWebCspNote.
+  ///
+  /// In en, this message translates to:
+  /// **'CSP: default-src \'none\' · Restricted network access · Isolated page state'**
+  String get genuiWebCspNote;
+
+  /// No description provided for @genuiWebFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview initialization or loading failed. View or copy its source.'**
+  String get genuiWebFailed;
+
+  /// No description provided for @genuiWebEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No HTML document after the header'**
+  String get genuiWebEmpty;
+
+  /// No description provided for @genuiWebBlockLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 3 web previews per message; the rest are shown as source'**
+  String get genuiWebBlockLimit;
+
+  /// No description provided for @genuiWebCloseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t confirm the previous preview closed. Restart the app before opening another.'**
+  String get genuiWebCloseFailed;
+
+  /// No description provided for @displaySettingsShowGenUiHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Show interactive UI title bar'**
+  String get displaySettingsShowGenUiHeader;
+
+  /// No description provided for @displaySettingsShowGenUiHeaderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide for a cleaner message. Source and actions remain in the menu below the UI.'**
+  String get displaySettingsShowGenUiHeaderSubtitle;
+
+  /// No description provided for @genuiClearFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filter'**
+  String get genuiClearFilter;
+
+  /// No description provided for @genuiClearSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear selection'**
+  String get genuiClearSelection;
+
+  /// No description provided for @chatInputBarQueuedPausedReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression did not finish; sending stays paused'**
+  String get chatInputBarQueuedPausedReason;
+
+  /// No description provided for @contextChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'History changed. Reopen this action to review its current scope.'**
+  String get contextChanged;
+
+  /// No description provided for @contextOperationSuperseded.
+  ///
+  /// In en, this message translates to:
+  /// **'Included in a later summary'**
+  String get contextOperationSuperseded;
+
+  /// No description provided for @compressIncludeAttachments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachment text & tool results'**
+  String get compressIncludeAttachments;
+
+  /// No description provided for @contextEditCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} characters'**
+  String contextEditCharacters(int count);
+
+  /// No description provided for @compressOverSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'The summary would exceed the context limit and was not applied.'**
+  String get compressOverSnack;
+
+  /// No description provided for @contextSummaryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the summary used in subsequent requests. Saving changes does not rewrite existing replies. Attachments contribute only available text; images are not reinterpreted.'**
+  String get contextSummaryHint;
+
+  /// No description provided for @compressAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get compressAdvanced;
+
+  /// No description provided for @compressTaskWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the current reply'**
+  String get compressTaskWaiting;
+
+  /// No description provided for @contextBudgetExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'The estimated context exceeds this model’s limit. Shorten the summary, compress again, or choose a model with a larger context.'**
+  String get contextBudgetExceeded;
+
+  /// No description provided for @contextManualSupplement.
+  ///
+  /// In en, this message translates to:
+  /// **'Include manually edited summaries as supplements'**
+  String get contextManualSupplement;
+
+  /// No description provided for @contextDetailEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Manually edited'**
+  String get contextDetailEdited;
+
+  /// No description provided for @contextSourceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary input'**
+  String get contextSourceLabel;
+
+  /// No description provided for @contextImpactSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change compressed originals?'**
+  String get contextImpactSourceTitle;
+
+  /// No description provided for @chatInputBarQueuedCompressionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression failed; sending stays paused'**
+  String get chatInputBarQueuedCompressionFailed;
+
+  /// No description provided for @contextTokenInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary input ≈ {before} tokens → summary ≈ {after} tokens'**
+  String contextTokenInfo(int before, int after);
+
+  /// No description provided for @worldBookTransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save the entries. Please try again.'**
+  String get worldBookTransferFailed;
+
+  /// No description provided for @contextDetailKeptCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest {count} user messages, replies and tools'**
+  String contextDetailKeptCount(int count);
+
+  /// No description provided for @toolPermissionRequestApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for approval'**
+  String get toolPermissionRequestApproval;
+
+  /// No description provided for @compressNothingNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new to compress since the last summary'**
+  String get compressNothingNew;
+
+  /// No description provided for @browserActionScreenshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture screenshot'**
+  String get browserActionScreenshot;
+
+  /// No description provided for @displaySettingsPageIosNativeSelectionMenuSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to input and messages. Turn off if menus feel slow.'**
+  String get displaySettingsPageIosNativeSelectionMenuSubtitle;
+
+  /// No description provided for @contextUndoneSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Undone · {from} → {to}'**
+  String contextUndoneSnack(String from, String to);
+
+  /// No description provided for @toolApprovalByFullAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Ran automatically'**
+  String get toolApprovalByFullAccess;
+
+  /// No description provided for @displaySettingsPageAutoScrollSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'While streaming, follow new content when at the bottom. Scrolling up pauses following until you return to the bottom. When off, new content does not scroll automatically.'**
+  String get displaySettingsPageAutoScrollSubtitle;
+
+  /// No description provided for @toolApprovalRealTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Actual target'**
+  String get toolApprovalRealTarget;
+
+  /// No description provided for @compressTaskRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get compressTaskRetry;
+
+  /// No description provided for @wsDeniedPathOutside.
+  ///
+  /// In en, this message translates to:
+  /// **'Target is outside the authorized area. Denied.'**
+  String get wsDeniedPathOutside;
+
+  /// No description provided for @contextImpactSaveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and undo {count} nodes'**
+  String contextImpactSaveConfirm(int count);
+
+  /// No description provided for @contextRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get contextRestore;
+
+  /// No description provided for @compressUsageOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'was {value}'**
+  String compressUsageOriginal(String value);
+
+  /// No description provided for @toolApprovalPendingKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting approval · {kind}'**
+  String toolApprovalPendingKind(String kind);
+
+  /// No description provided for @contextTaskApplying.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying summary'**
+  String get contextTaskApplying;
+
+  /// No description provided for @storageSpaceImagesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting images affects chat history and tool results. Avatars and backgrounds in use are protected.'**
+  String get storageSpaceImagesHint;
+
+  /// No description provided for @displaySettingsPageIosNativeSelectionMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'iOS 26+ native selection menu'**
+  String get displaySettingsPageIosNativeSelectionMenuTitle;
+
+  /// No description provided for @worldBookMoveEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to…'**
+  String get worldBookMoveEntries;
+
+  /// No description provided for @compressReread.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-read compressed originals'**
+  String get compressReread;
+
+  /// No description provided for @chatInputBarQueuedPausedHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Input remains paused; cancel the queue to edit or send'**
+  String get chatInputBarQueuedPausedHold;
+
+  /// No description provided for @contextSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Context summary'**
+  String get contextSummaryTitle;
+
+  /// No description provided for @contextKeepInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive number of user messages.'**
+  String get contextKeepInvalid;
+
+  /// No description provided for @compressTaskAbandon.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get compressTaskAbandon;
+
+  /// No description provided for @browserAgentTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation timed out; AI paused'**
+  String get browserAgentTimedOut;
+
+  /// No description provided for @compressCancelledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression cancelled. Current context is unchanged.'**
+  String get compressCancelledSnack;
+
+  /// No description provided for @contextImpactClearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo earlier clear?'**
+  String get contextImpactClearTitle;
+
+  /// No description provided for @compressTaskWaitingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for tool approval'**
+  String get compressTaskWaitingApproval;
+
+  /// No description provided for @contextTaskFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression failed'**
+  String get contextTaskFailed;
+
+  /// No description provided for @wsDeniedSkillsReadonly.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills folder is read-only.'**
+  String get wsDeniedSkillsReadonly;
+
+  /// No description provided for @compressTaskMerging.
+  ///
+  /// In en, this message translates to:
+  /// **'Merging summaries'**
+  String get compressTaskMerging;
+
+  /// No description provided for @toolPermissionFullAccessDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets this conversation access files on this device, run commands, and use enabled online tools without asking each time.'**
+  String get toolPermissionFullAccessDesc;
+
+  /// No description provided for @compressStaleSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat history changed; the summary was not applied.'**
+  String get compressStaleSnack;
+
+  /// No description provided for @worldBookCopyEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to…'**
+  String get worldBookCopyEntries;
+
+  /// No description provided for @contextEditEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary cannot be empty. Use Clear context to exclude all earlier history.'**
+  String get contextEditEmpty;
+
+  /// No description provided for @toolApprovalDenyWithReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Deny with reason…'**
+  String get toolApprovalDenyWithReason;
+
+  /// No description provided for @toolApprovalRequestedPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested path'**
+  String get toolApprovalRequestedPath;
+
+  /// No description provided for @toolApprovalScopeOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to this call only'**
+  String get toolApprovalScopeOnce;
+
+  /// No description provided for @storageSpaceImageTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get storageSpaceImageTypeLabel;
+
+  /// No description provided for @contextImpactUndoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo earlier compression?'**
+  String get contextImpactUndoTitle;
+
+  /// No description provided for @contextOriginalMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'View original messages'**
+  String get contextOriginalMessages;
+
+  /// No description provided for @storageSpaceDeleteImagesConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} images? Related chat images, tool screenshots, and conversation copies will no longer be available. Avatars and backgrounds in use will be kept.'**
+  String storageSpaceDeleteImagesConfirmMessage(int count);
+
+  /// No description provided for @chatInputBarQueuedAfterCompress.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends after compression'**
+  String get chatInputBarQueuedAfterCompress;
+
+  /// No description provided for @toolPermissionFullAccessDescMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets this conversation run tools automatically inside the sandbox and authorized folders, without asking each time.'**
+  String get toolPermissionFullAccessDescMobile;
+
+  /// No description provided for @compressTaskAdjustRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust options and retry'**
+  String get compressTaskAdjustRetry;
+
+  /// No description provided for @contextDetailLegacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted from legacy clear'**
+  String get contextDetailLegacy;
+
+  /// No description provided for @contextDetailCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current context'**
+  String get contextDetailCurrent;
+
+  /// No description provided for @toolPermissionUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get toolPermissionUndo;
+
+  /// No description provided for @contextDetailViewOriginals.
+  ///
+  /// In en, this message translates to:
+  /// **'View originals'**
+  String get contextDetailViewOriginals;
+
+  /// No description provided for @contextTaskCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression complete'**
+  String get contextTaskCompleted;
+
+  /// No description provided for @chatInputBarQueuedPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get chatInputBarQueuedPaused;
+
+  /// No description provided for @contextCompressMarker.
+  ///
+  /// In en, this message translates to:
+  /// **'Context compressed'**
+  String get contextCompressMarker;
+
+  /// No description provided for @contextDetailParts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} segments'**
+  String contextDetailParts(int count);
+
+  /// No description provided for @contextEditPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved; applies after the current reply'**
+  String get contextEditPending;
+
+  /// No description provided for @contextTaskRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry compression'**
+  String get contextTaskRetry;
+
+  /// No description provided for @contextUndoCompressTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo this compression'**
+  String get contextUndoCompressTooltip;
+
+  /// No description provided for @contextDividerCompressed.
+  ///
+  /// In en, this message translates to:
+  /// **'Context compressed'**
+  String get contextDividerCompressed;
+
+  /// No description provided for @compressSuccessSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Context compressed · {from} → {to}'**
+  String compressSuccessSnack(String from, String to);
+
+  /// No description provided for @contextEffectiveHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Current summary and later messages'**
+  String get contextEffectiveHistory;
+
+  /// No description provided for @compressRereadAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All originals in segment'**
+  String get compressRereadAll;
+
+  /// No description provided for @contextDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get contextDone;
+
+  /// No description provided for @contextMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get contextMore;
+
+  /// No description provided for @compressFailedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression failed: {reason}'**
+  String compressFailedSnack(String reason);
+
+  /// No description provided for @branchInheritNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only inherits context nodes active before this point'**
+  String get branchInheritNote;
+
+  /// No description provided for @contextTaskInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression interrupted; input is preserved'**
+  String get contextTaskInterrupted;
+
+  /// No description provided for @storageSpaceImageTypeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get storageSpaceImageTypeAll;
+
+  /// No description provided for @contextRangeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaces {count} messages; keeps {keep} recent user messages and their replies.'**
+  String contextRangeInfo(int count, int keep);
+
+  /// No description provided for @contextInputModeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Input: {mode} · {source}'**
+  String contextInputModeInfo(String mode, String source);
+
+  /// No description provided for @contextDetailKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept'**
+  String get contextDetailKept;
+
+  /// No description provided for @worldBookEntriesCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Copied 1 entry} other{Copied {count} entries}}'**
+  String worldBookEntriesCopied(int count);
+
+  /// No description provided for @toolPermissionSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t save. Permission unchanged.'**
+  String get toolPermissionSaveFailed;
+
+  /// No description provided for @compressDiscardedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Context cleared; the running compression was discarded.'**
+  String get compressDiscardedSnack;
+
+  /// No description provided for @browserActionSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select option'**
+  String get browserActionSelect;
+
+  /// No description provided for @toolPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions'**
+  String get toolPermissionTitle;
+
+  /// No description provided for @contextDetailNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next request'**
+  String get contextDetailNext;
+
+  /// No description provided for @contextTaskCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel compression'**
+  String get contextTaskCancel;
+
+  /// No description provided for @toolPermissionFullAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Full access'**
+  String get toolPermissionFullAccess;
+
+  /// No description provided for @chatInputBarQueuedCompressionCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression cancelled; sending stays paused'**
+  String get chatInputBarQueuedCompressionCancelled;
+
+  /// No description provided for @toolPermissionResetSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace changed · permission reset to Ask for approval'**
+  String get toolPermissionResetSnack;
+
+  /// No description provided for @contextImpactUndoOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get contextImpactUndoOne;
+
+  /// No description provided for @contextDetailContinueNewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue in new chat'**
+  String get contextDetailContinueNewChat;
+
+  /// No description provided for @contextTaskPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending paused — cancel the queue to edit'**
+  String get contextTaskPaused;
+
+  /// No description provided for @contextTaskReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the summary before applying'**
+  String get contextTaskReview;
+
+  /// No description provided for @compressApproxTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'Approx. {value} tokens'**
+  String compressApproxTokens(String value);
+
+  /// No description provided for @storageSpaceImageInUseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Change or remove this avatar, background, or icon in its settings before deleting it.'**
+  String get storageSpaceImageInUseHint;
+
+  /// No description provided for @compressRereadLastLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand last layer'**
+  String get compressRereadLastLayer;
+
+  /// No description provided for @contextRestoreOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore operation'**
+  String get contextRestoreOperation;
+
+  /// No description provided for @contextOriginalHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-read all original messages in this segment'**
+  String get contextOriginalHistory;
+
+  /// No description provided for @contextImpactEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save earlier summary?'**
+  String get contextImpactEditTitle;
+
+  /// No description provided for @contextOpenNewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open new chat'**
+  String get contextOpenNewChat;
+
+  /// No description provided for @wsPathChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Target changed while awaiting approval.'**
+  String get wsPathChanged;
+
+  /// No description provided for @contextEditUnknownPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage is unavailable; it will be checked again before saving.'**
+  String get contextEditUnknownPreview;
+
+  /// No description provided for @contextTaskWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the current reply and tools to finish'**
+  String get contextTaskWait;
+
+  /// No description provided for @compressTaskElapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Part {i}/{n} · {seconds}s elapsed'**
+  String compressTaskElapsed(int i, int n, int seconds);
+
+  /// No description provided for @wsContextChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation context changed. Request expired.'**
+  String get wsContextChanged;
+
+  /// No description provided for @contextChangeImpact.
+  ///
+  /// In en, this message translates to:
+  /// **'This change will also undo {count} affected context operations. Original messages are kept. Continue?'**
+  String contextChangeImpact(int count);
+
+  /// No description provided for @contextImpactSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get contextImpactSave;
+
+  /// No description provided for @contextTaskProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Compressing {done}/{total} segments'**
+  String contextTaskProgress(int done, int total);
+
+  /// No description provided for @contextSummaryNotSmaller.
+  ///
+  /// In en, this message translates to:
+  /// **'The summary is not shorter than its input. Review it before applying.'**
+  String get contextSummaryNotSmaller;
+
+  /// No description provided for @storageSpaceImageTypeTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Tool images'**
+  String get storageSpaceImageTypeTool;
+
+  /// No description provided for @contextPreviousHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-read the last compression layer'**
+  String get contextPreviousHistory;
+
+  /// No description provided for @contextDetailRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get contextDetailRead;
+
+  /// No description provided for @contextViewGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'View generated summary'**
+  String get contextViewGenerated;
+
+  /// No description provided for @contextImpactDeleteDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the originals and undo related summaries so removed content is not sent again. Other messages and independent nodes are unchanged.'**
+  String get contextImpactDeleteDescription;
+
+  /// No description provided for @storageSpaceImageTypeAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatars & backgrounds'**
+  String get storageSpaceImageTypeAvatar;
+
+  /// No description provided for @contextDetailAfterUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'After undo'**
+  String get contextDetailAfterUndo;
+
+  /// No description provided for @contextOperationUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo this context operation'**
+  String get contextOperationUndo;
+
+  /// No description provided for @contextHistoryWindowNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent history is still limited by the chat’s {count}-message sending window.'**
+  String contextHistoryWindowNote(int count);
+
+  /// No description provided for @contextOverLimitWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo may exceed the context limit. You can still undo and recompress; sending checks the limit again.'**
+  String get contextOverLimitWarning;
+
+  /// No description provided for @storageSpaceImageTypeChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat images'**
+  String get storageSpaceImageTypeChat;
+
+  /// No description provided for @worldBookSelectEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Select entries'**
+  String get worldBookSelectEntries;
+
+  /// No description provided for @compressUsageSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Est. summary'**
+  String get compressUsageSummary;
+
+  /// No description provided for @contextDetailRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages {from}–{to} · {count} user messages'**
+  String contextDetailRange(String from, String to, int count);
+
+  /// No description provided for @contextOperationHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Excluded by a later clear'**
+  String get contextOperationHidden;
+
+  /// No description provided for @contextUndoClearTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo this clear'**
+  String get contextUndoClearTooltip;
+
+  /// No description provided for @compressKeepDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the latest {count} user messages with their replies and tools. Earlier history is summarized; attachment-only messages also count.'**
+  String compressKeepDescription(int count);
+
+  /// No description provided for @contextOperationUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'Undone'**
+  String get contextOperationUndone;
+
+  /// No description provided for @contextEditPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Approx. {value} tokens after saving. Editing does not change active context.'**
+  String contextEditPreview(String value);
+
+  /// No description provided for @contextDetailExcluded.
+  ///
+  /// In en, this message translates to:
+  /// **'Excluded history'**
+  String get contextDetailExcluded;
+
+  /// No description provided for @worldBookNoMoveTargets.
+  ///
+  /// In en, this message translates to:
+  /// **'Create another world book to move entries into it.'**
+  String get worldBookNoMoveTargets;
+
+  /// No description provided for @worldBookSelectedEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String worldBookSelectedEntries(int count);
+
+  /// No description provided for @contextDetailReplaced.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaced'**
+  String get contextDetailReplaced;
+
+  /// No description provided for @displaySettingsPageAutoScrollEnabledLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get displaySettingsPageAutoScrollEnabledLabel;
+
+  /// No description provided for @contextChangeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review affected context'**
+  String get contextChangeTitle;
+
+  /// No description provided for @contextDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get contextDetailTitle;
+
+  /// No description provided for @compressModelGlobal.
+  ///
+  /// In en, this message translates to:
+  /// **'Global setting · fixed when started'**
+  String get compressModelGlobal;
+
+  /// No description provided for @wsDeniedMountReadonly.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only mount. Can’t write.'**
+  String get wsDeniedMountReadonly;
+
+  /// No description provided for @compressRereadDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recover details lost across summaries. Uses more tokens.'**
+  String get compressRereadDesc;
+
+  /// No description provided for @toolApprovalSwitchToFullAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to full access'**
+  String get toolApprovalSwitchToFullAccess;
+
+  /// No description provided for @compressUsageInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary input'**
+  String get compressUsageInput;
+
+  /// No description provided for @contextDetailSummaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary used in later requests'**
+  String get contextDetailSummaryLabel;
+
+  /// No description provided for @contextImpactDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete compressed originals?'**
+  String get contextImpactDeleteTitle;
+
+  /// No description provided for @compressAdvancedOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-read originals off'**
+  String get compressAdvancedOff;
+
+  /// No description provided for @contextOperationActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently applied'**
+  String get contextOperationActive;
+
+  /// No description provided for @compressAdvancedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-read originals on'**
+  String get compressAdvancedOn;
+
+  /// No description provided for @contextTaskMerging.
+  ///
+  /// In en, this message translates to:
+  /// **'Merging summaries'**
+  String get contextTaskMerging;
+
+  /// No description provided for @contextSampledInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the selected {count} characters were read; the summary replaces the entire selected history range.'**
+  String contextSampledInfo(int count);
+
+  /// No description provided for @contextDividerRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Compressing context'**
+  String get contextDividerRunning;
+
+  /// No description provided for @contextClearDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier chat history is excluded from future requests. System instructions, memory and tool definitions still apply.'**
+  String get contextClearDetails;
+
+  /// No description provided for @compressCopyResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy result'**
+  String get compressCopyResult;
+
+  /// No description provided for @contextDetailInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'In use'**
+  String get contextDetailInUse;
+
+  /// No description provided for @contextImpactDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Related summaries will be undone together. Original messages and independent nodes are kept; no model is called automatically.'**
+  String get contextImpactDescription;
+
+  /// No description provided for @compressIncludeAttachmentsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Include available attachment text and bounded tool records. Truncation is marked; images are not reinterpreted.'**
+  String get compressIncludeAttachmentsDesc;
+
+  /// No description provided for @worldBookEntriesMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Moved 1 entry} other{Moved {count} entries}}'**
+  String worldBookEntriesMoved(int count);
+
+  /// No description provided for @contextImpactSourceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Change the originals and undo their summaries and dependent nodes together. Other messages and independent nodes are kept; no model is called.'**
+  String get contextImpactSourceDescription;
+
+  /// No description provided for @contextEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit summary'**
+  String get contextEditTitle;
+
+  /// No description provided for @compressUsageNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next request'**
+  String get compressUsageNext;
+
+  /// No description provided for @contextSummaryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The summary cannot be empty. Use Clear context to exclude history.'**
+  String get contextSummaryEmpty;
+
+  /// No description provided for @toolApprovalDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Denied'**
+  String get toolApprovalDenied;
+
+  /// No description provided for @contextDetailModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Model · time'**
+  String get contextDetailModel;
+
+  /// No description provided for @compressIncludeManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Include manual edits · {count}'**
+  String compressIncludeManual(int count);
+
+  /// No description provided for @contextBudgetInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated next request (including output reserve): {used} / {limit} tokens'**
+  String contextBudgetInfo(int used, String limit);
+
+  /// No description provided for @contextTaskDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss status'**
+  String get contextTaskDismiss;
+
+  /// No description provided for @contextUndoBudgetInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'After undo: approximately {used} tokens including output reserve'**
+  String contextUndoBudgetInfo(int used);
+
+  /// No description provided for @storageSpaceImageInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'In use'**
+  String get storageSpaceImageInUse;
+
+  /// No description provided for @worldBookSelectionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get worldBookSelectionDone;
+
+  /// No description provided for @contextDividerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression failed'**
+  String get contextDividerFailed;
+
+  /// No description provided for @toolPermissionUnboundHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No workspace bound: this does not turn on file or shell tools.'**
+  String get toolPermissionUnboundHint;
+
+  /// No description provided for @contextChangeWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the current reply and tools to finish before applying this change.'**
+  String get contextChangeWaiting;
+
+  /// No description provided for @storageSpaceDeletedUploadsPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {deleted} items; kept {kept} items that are in use or could not be deleted.'**
+  String storageSpaceDeletedUploadsPartial(int deleted, int kept);
+
+  /// No description provided for @contextSourceScopeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only history after the latest clear is included. This may include older messages outside the normal send window.'**
+  String get contextSourceScopeHint;
+
+  /// No description provided for @contextTaskPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing compression'**
+  String get contextTaskPreparing;
+
+  /// No description provided for @contextImpactUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'Approx. {from} → {to} tokens'**
+  String contextImpactUsage(String from, String to);
+
+  /// No description provided for @contextImpactConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo {count} nodes'**
+  String contextImpactConfirm(int count);
+
+  /// No description provided for @contextDividerEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'edited'**
+  String get contextDividerEdited;
+
+  /// No description provided for @compressAdjust.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust'**
+  String get compressAdjust;
+
+  /// No description provided for @compressRegenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Recompress'**
+  String get compressRegenerate;
+
+  /// No description provided for @toolPermissionEnabledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Full access enabled for this chat'**
+  String get toolPermissionEnabledSnack;
+
+  /// No description provided for @contextDetailSuperseded.
+  ///
+  /// In en, this message translates to:
+  /// **'Superseded by a later summary'**
+  String get contextDetailSuperseded;
+
+  /// No description provided for @contextTaskQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued — waiting for compression'**
+  String get contextTaskQueued;
+
+  /// No description provided for @contextNewConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new chat with the summary'**
+  String get contextNewConversation;
+
+  /// No description provided for @contextUnknownLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'unknown limit'**
+  String get contextUnknownLimit;
+
+  /// No description provided for @browserErrActionTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation timed out; outcome unknown. Check the page before allowing AI to continue.'**
+  String get browserErrActionTimeout;
+
+  /// No description provided for @toolPermissionRequestApprovalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Kelivo will ask before accessing files outside the workspace, running desktop commands, or using other tools that need approval.'**
+  String get toolPermissionRequestApprovalDesc;
+
+  /// No description provided for @contextLimitedInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the selected character window is read. The rest of the replaced history is not included in the summary; original messages remain available.'**
+  String get contextLimitedInputHint;
+
+  /// No description provided for @contextTaskCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Compression cancelled'**
+  String get contextTaskCancelled;
+
+  /// No description provided for @contextDetailClearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Context cleared'**
+  String get contextDetailClearTitle;
+
+  /// No description provided for @contextImpactKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Unchanged'**
+  String get contextImpactKeep;
+
+  /// No description provided for @contextImpactUndoAlso.
+  ///
+  /// In en, this message translates to:
+  /// **'Also undone'**
+  String get contextImpactUndoAlso;
+
+  /// No description provided for @contextClearMarker.
+  ///
+  /// In en, this message translates to:
+  /// **'Context cleared'**
+  String get contextClearMarker;
+
+  /// No description provided for @toolPermissionScopeThisChat.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat only'**
+  String get toolPermissionScopeThisChat;
+
+  /// No description provided for @dataDirectoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data directory'**
+  String get dataDirectoryTitle;
+
+  /// No description provided for @dataDirectoryChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change directory'**
+  String get dataDirectoryChange;
+
+  /// No description provided for @dataDirectoryChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an empty local folder'**
+  String get dataDirectoryChoose;
+
+  /// No description provided for @dataDirectoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an empty folder on a local drive. Chat history, attachments and app-managed files move after a restart. Small device settings and system caches stay in their system locations.'**
+  String get dataDirectoryHint;
+
+  /// No description provided for @dataDirectoryPendingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The move is scheduled for the next restart. Your current data remains in place until copying and verification finish. Destination:'**
+  String get dataDirectoryPendingHint;
+
+  /// No description provided for @dataDirectoryRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart and move data'**
+  String get dataDirectoryRestart;
+
+  /// No description provided for @dataDirectoryCancelMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel move and keep original directory'**
+  String get dataDirectoryCancelMove;
+
+  /// No description provided for @dataDirectoryPreviousHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The original copy was retained. Once the new directory has started successfully, you can remove the old copy to free disk space. Clean it before changing directories again.'**
+  String get dataDirectoryPreviousHint;
+
+  /// No description provided for @dataDirectoryCleanPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean up original copy'**
+  String get dataDirectoryCleanPrevious;
+
+  /// No description provided for @dataDirectoryCleanConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the retained copy from the directory below? Data in the current directory will be kept. Files changed since the move will not be deleted.'**
+  String get dataDirectoryCleanConfirm;
+
+  /// No description provided for @dataDirectoryMoving.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving and verifying data… Please keep Kelivo open.'**
+  String get dataDirectoryMoving;
+
+  /// No description provided for @dataDirectoryStartupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open the data directory'**
+  String get dataDirectoryStartupFailed;
+
+  /// No description provided for @dataDirectoryRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get dataDirectoryRetry;
+
+  /// No description provided for @dataDirectoryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The data directory is unavailable. Reconnect the drive or restore the folder to its original location, then retry. No empty database will be created.'**
+  String get dataDirectoryUnavailable;
+
+  /// No description provided for @dataDirectoryIdentityMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder does not match the configured data directory. Restore the original folder and retry.'**
+  String get dataDirectoryIdentityMismatch;
+
+  /// No description provided for @dataDirectoryNotEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an empty folder. Existing files will not be overwritten.'**
+  String get dataDirectoryNotEmpty;
+
+  /// No description provided for @dataDirectoryOverlap.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a separate folder outside the current data directory. Its parent folders and the drive root cannot be used.'**
+  String get dataDirectoryOverlap;
+
+  /// No description provided for @dataDirectoryLocalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a local drive rather than a network share.'**
+  String get dataDirectoryLocalOnly;
+
+  /// No description provided for @dataDirectoryFinishPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish or cancel the pending move, and clean up the retained copy before choosing another directory.'**
+  String get dataDirectoryFinishPrevious;
+
+  /// No description provided for @dataDirectoryPendingRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'A backup restore is pending. Cancel the directory move and restart to finish restoring, then try the move again.'**
+  String get dataDirectoryPendingRestore;
+
+  /// No description provided for @dataDirectorySourceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The original data has changed since the copy was made. It has been kept. Cancel the pending move before starting a new one; retained copies can be inspected manually.'**
+  String get dataDirectorySourceChanged;
+
+  /// No description provided for @dataDirectoryCopyChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The destination contains unexpected or changed files. The original data has been kept. Check the destination before retrying.'**
+  String get dataDirectoryCopyChanged;
+
+  /// No description provided for @dataDirectoryGenericError.
+  ///
+  /// In en, this message translates to:
+  /// **'The operation could not finish. Check available disk space, folder permissions and whether another Kelivo process is running, then retry. Existing data has been kept.'**
+  String get dataDirectoryGenericError;
+
+  /// No description provided for @dataDirectoryCancelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelling keeps any files already copied to the destination. You can inspect and remove that partial copy yourself.'**
+  String get dataDirectoryCancelHint;
+
+  /// No description provided for @providerDetailPageBaseUrlExample.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. {url}'**
+  String providerDetailPageBaseUrlExample(String url);
+
+  /// No description provided for @providerDetailPageApiKeyExample.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. sk-…'**
+  String get providerDetailPageApiKeyExample;
+
+  /// No description provided for @providerDetailPageRequestUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Request URL'**
+  String get providerDetailPageRequestUrlLabel;
+
+  /// No description provided for @providerDetailPageUrlWillAppendVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'No version in URL; {v} will be added when you leave the field'**
+  String providerDetailPageUrlWillAppendVersion(String v);
+
+  /// No description provided for @providerDetailPageUrlAppendedVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Added {v} automatically'**
+  String providerDetailPageUrlAppendedVersion(String v);
+
+  /// No description provided for @providerDetailPageUrlTrimmedSlash.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed trailing /'**
+  String get providerDetailPageUrlTrimmedSlash;
+
+  /// No description provided for @providerDetailPageUrlMovedPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Full endpoint detected; {path} moved to API Path'**
+  String providerDetailPageUrlMovedPath(String path);
+
+  /// No description provided for @providerDetailPageUrlEmptyError.
+  ///
+  /// In en, this message translates to:
+  /// **'Required to send requests'**
+  String get providerDetailPageUrlEmptyError;
+
+  /// No description provided for @providerDetailPageUrlInvalidError.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid URL; must start with http:// or https://'**
+  String get providerDetailPageUrlInvalidError;
+
+  /// No description provided for @providerDetailPageRestoreDefaultTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore default'**
+  String get providerDetailPageRestoreDefaultTooltip;
+
+  /// No description provided for @providerDetailPageClearTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get providerDetailPageClearTooltip;
+
+  /// No description provided for @providerDetailPageTestSuccessWithLatency.
+  ///
+  /// In en, this message translates to:
+  /// **'Success · {ms} ms'**
+  String providerDetailPageTestSuccessWithLatency(String ms);
+
+  /// No description provided for @providerDetailPageTestFailedWithCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed · {code}'**
+  String providerDetailPageTestFailedWithCode(String code);
+
+  /// No description provided for @providerDetailPageTestHintMissingVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'The URL may be missing a version; try {url}'**
+  String providerDetailPageTestHintMissingVersion(String url);
+
+  /// No description provided for @providerAutoVersionAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added {v} automatically'**
+  String providerAutoVersionAdded(String v);
+
+  /// No description provided for @providerUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get providerUndo;
+
+  /// No description provided for @sidePanelToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle side panel'**
+  String get sidePanelToggle;
+
+  /// No description provided for @sidePanelFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get sidePanelFiles;
+
+  /// No description provided for @sidePanelTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics'**
+  String get sidePanelTopics;
+
+  /// No description provided for @sidePanelExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand panel'**
+  String get sidePanelExpand;
+
+  /// No description provided for @sidePanelCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit expanded'**
+  String get sidePanelCollapse;
+
+  /// No description provided for @sidePanelAllTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'All tabs'**
+  String get sidePanelAllTabs;
+
+  /// No description provided for @sidePanelMoreTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} more'**
+  String sidePanelMoreTabs(int count);
+
+  /// No description provided for @sidePanelSearchTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tabs'**
+  String get sidePanelSearchTabs;
+
+  /// No description provided for @sidePanelOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open file…'**
+  String get sidePanelOpenFile;
+
+  /// No description provided for @sidePanelCloseOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Close other tabs'**
+  String get sidePanelCloseOthers;
+
+  /// No description provided for @sidePanelCloseRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Close tabs to the right'**
+  String get sidePanelCloseRight;
+
+  /// No description provided for @sidePanelReopenTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen closed tab'**
+  String get sidePanelReopenTab;
+
+  /// No description provided for @sidePanelPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned · can’t close'**
+  String get sidePanelPinned;
+
+  /// No description provided for @sidePanelMoveTopicsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Move topics back to the left…'**
+  String get sidePanelMoveTopicsLeft;
+
+  /// No description provided for @sidePanelPinnedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics stay pinned while on the right. Change it in Settings › Display › Topic position.'**
+  String get sidePanelPinnedHint;
+
+  /// No description provided for @sidePanelEvictedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Page unloaded'**
+  String get sidePanelEvictedTitle;
+
+  /// No description provided for @sidePanelEvictedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Unloaded in the background to save memory (up to {count} background pages are kept). Reload to continue browsing.'**
+  String sidePanelEvictedBody(int count);
+
+  /// No description provided for @sidePanelEvictedTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Unloaded · reload to continue'**
+  String get sidePanelEvictedTooltip;
+
+  /// No description provided for @sidePanelFileMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'File unavailable'**
+  String get sidePanelFileMissing;
+
+  /// No description provided for @sidePanelFileMissingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{path} was deleted or moved.'**
+  String sidePanelFileMissingBody(String path);
+
+  /// No description provided for @sidePanelRelocate.
+  ///
+  /// In en, this message translates to:
+  /// **'Find again'**
+  String get sidePanelRelocate;
+
+  /// No description provided for @sidePanelBackgroundIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Running in “{topic}”'**
+  String sidePanelBackgroundIn(String topic);
+
+  /// No description provided for @sidePanelWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'{px}px'**
+  String sidePanelWidth(int px);
+
+  /// No description provided for @sidePanelWidthMax.
+  ///
+  /// In en, this message translates to:
+  /// **'max'**
+  String get sidePanelWidthMax;
+
+  /// No description provided for @sidePanelWidthMin.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get sidePanelWidthMin;
+
+  /// No description provided for @sidePanelRecentFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent outputs and attachments'**
+  String get sidePanelRecentFiles;
+
+  /// No description provided for @sidePanelOpenExternalUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Open URL in system browser…'**
+  String get sidePanelOpenExternalUrl;
+
+  /// No description provided for @sidePanelWebPages.
+  ///
+  /// In en, this message translates to:
+  /// **'Web pages'**
+  String get sidePanelWebPages;
+
+  /// No description provided for @hotkeyToggleSidePanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle side panel'**
+  String get hotkeyToggleSidePanel;
+
+  /// No description provided for @hotkeySidePanelNewWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'New web tab'**
+  String get hotkeySidePanelNewWeb;
+
+  /// No description provided for @hotkeySidePanelFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Show files'**
+  String get hotkeySidePanelFiles;
+
+  /// No description provided for @hotkeySidePanelExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand side panel'**
+  String get hotkeySidePanelExpand;
+
+  /// No description provided for @hotkeySidePanelReopenTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen closed tab'**
+  String get hotkeySidePanelReopenTab;
+
+  /// No description provided for @hotkeySidePanelNextTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Next panel tab'**
+  String get hotkeySidePanelNextTab;
+
+  /// No description provided for @hotkeySidePanelPreviousTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous panel tab'**
+  String get hotkeySidePanelPreviousTab;
+
+  /// No description provided for @hotkeySidePanelAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus web address'**
+  String get hotkeySidePanelAddress;
+
+  /// No description provided for @hotkeySidePanelFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle chat and panel focus'**
+  String get hotkeySidePanelFocus;
+
+  /// No description provided for @selectionQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'Quote'**
+  String get selectionQuote;
+
+  /// Numbered quote reference in sent, copied, and exported messages
+  ///
+  /// In en, this message translates to:
+  /// **'[Quote {index}]'**
+  String selectionQuoteMarker(int index);
+
+  /// No description provided for @selectionTranslate.
+  ///
+  /// In en, this message translates to:
+  /// **'Translate'**
+  String get selectionTranslate;
+
+  /// No description provided for @selectionAiTranslateIos.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Translate'**
+  String get selectionAiTranslateIos;
+
+  /// No description provided for @selectionCopyMarkdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy as Markdown'**
+  String get selectionCopyMarkdown;
+
+  /// No description provided for @selectionCopyRich.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy rich text'**
+  String get selectionCopyRich;
+
+  /// No description provided for @quoteJumpToSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to source'**
+  String get quoteJumpToSource;
+
+  /// No description provided for @quoteRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove quote'**
+  String get quoteRemove;
+
+  /// No description provided for @quoteDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Already quoted'**
+  String get quoteDuplicate;
+
+  /// No description provided for @quoteLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 10 quotes per message'**
+  String get quoteLimit;
+
+  /// No description provided for @quoteLocated.
+  ///
+  /// In en, this message translates to:
+  /// **'Jumped to quoted text'**
+  String get quoteLocated;
+
+  /// No description provided for @quoteSourceMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Source no longer exists'**
+  String get quoteSourceMissing;
+
+  /// No description provided for @selectionRegenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate'**
+  String get selectionRegenerate;
+
+  /// No description provided for @translating.
+  ///
+  /// In en, this message translates to:
+  /// **'Translating…'**
+  String get translating;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate

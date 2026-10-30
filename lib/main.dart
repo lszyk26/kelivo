@@ -1,3 +1,4 @@
+import 'features/side_panel/desktop_side_panel_controller.dart';
 import 'core/services/scheduled_tasks_service.dart';
 import 'core/services/auth/provider_oauth_service.dart';
 import 'package:Kelivo/core/services/sandbox/workspace_channel.dart';
@@ -95,6 +96,8 @@ import 'shared/widgets/floating_ipad_padding.dart';
 import 'shared/widgets/snackbar.dart';
 import 'shared/widgets/restore_failure_screen.dart';
 import 'shared/widgets/restore_progress_screen.dart';
+import 'shared/widgets/windows_data_directory_startup.dart';
+import 'core/services/storage/windows_data_directory.dart';
 import 'shared/widgets/restore_outcome_notice.dart';
 import 'shared/widgets/update_required_screen.dart';
 import 'package:system_fonts/system_fonts.dart';
@@ -108,6 +111,8 @@ import 'core/services/mobile_background.dart';
 import 'core/services/notification_service.dart';
 import 'features/home/controllers/chat_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'core/models/workspace_binding.dart';
+import 'core/services/browser/browser_workspace_resources.dart';
 
 final RouteObserver<ModalRoute<dynamic>> routeObserver =
     RouteObserver<ModalRoute<dynamic>>();
@@ -120,6 +125,17 @@ void _wireWorkspaceServices(BuildContext ctx) {
     final chat = ctx.read<ChatService>();
     final workspaces = ctx.read<WorkspaceProvider>();
     final assistants = ctx.read<AssistantProvider>();
+    BrowserWorkspaceResources.instance.rootForSession = (sessionId) async {
+      await workspaces.loaded;
+      final conversation = chat.getConversation(sessionId);
+      if (conversation == null) return null;
+      final binding = WorkspaceBinding.fromExtras(conversation.extras);
+      final workspace = binding.workspaceId == null
+          ? null
+          : workspaces.byId(binding.workspaceId!);
+      if (workspace == null) return null;
+      return Directory(await workspaces.hostRootFor(workspace));
+    };
     chat.newConversationExtras = (assistantId) {
       if (assistantId == null) {
         return const <String, dynamic>{};
@@ -169,6 +185,11 @@ Future<void> main() async {
       // Show before the restore gate so progress and failure screens stay visible.
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.linux) {
         await _initDesktopWindow();
+      }
+      if (defaultTargetPlatform == TargetPlatform.windows) {
+        await initializeWindowsDataDirectory(
+          showWindow: _initRestoreFailureWindow,
+        );
       }
       final appDataDirectory = await AppDirectories.getAppDataDirectory();
       final retained = await AppDirectories.documentsDirectoryFor(
@@ -397,6 +418,14 @@ Future<void> main() async {
           return;
         }
       }
+      if (defaultTargetPlatform == TargetPlatform.windows) {
+        try {
+          await (await WindowsDataDirectory.instance).confirmStartup();
+        } catch (error) {
+          // Keep the retained source when confirmation cannot be persisted.
+          stderr.writeln('[DataDirectoryConfirmation] $error');
+        }
+      }
       // Desktop exit hook: drain queued preference writes before process exit.
       _installExitFlush(businessPreferences);
       ScheduledTasksService.configureDevice(businessPreferences);
@@ -608,6 +637,7 @@ void _installExitFlush(BusinessPreferences businessPreferences) {
       defaultTargetPlatform == TargetPlatform.macOS ||
       defaultTargetPlatform == TargetPlatform.linux;
   if (!isDesktop || _exitFlushListener != null) return;
+  AppExitFlush.register(DesktopSidePanelController.instance.flush);
   AppExitFlush.register(businessPreferences.flushPendingWrites);
   AppExitFlush.register(ChatActions.flushActiveGenerationProgress);
   _exitFlushListener = AppLifecycleListener(
@@ -719,6 +749,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) {
             final assistants = ctx.read<AssistantProvider>();
+            DesktopSidePanelController.instance.bindPreferences(
+              businessPreferences,
+            );
             final settings = SettingsProvider(
               businessPreferences,
               onProviderModelsRetired:

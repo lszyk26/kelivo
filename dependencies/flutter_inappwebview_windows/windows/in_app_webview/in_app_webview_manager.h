@@ -27,11 +27,14 @@ namespace flutter_inappwebview_plugin
     const FlutterInappwebviewWindowsPlugin* plugin;
     std::map<uint64_t, std::unique_ptr<CustomPlatformView>> webViews;
     std::map<std::string, std::unique_ptr<CustomPlatformView>> keepAliveWebViews;
-    std::map<int64_t, std::unique_ptr<NewWindowRequestedArgs>> windowWebViews;
+    std::map<int64_t, std::shared_ptr<NewWindowRequestedArgs>> windowWebViews;
+    const std::shared_ptr<bool> alive = std::make_shared<bool>(true);
     int64_t windowAutoincrementId = 0;
 
     bool isSupported() const { return valid_; }
-    bool isGraphicsCaptureSessionSupported();
+    HRESULT initializationResult() const { return initializationResult_; }
+    const std::string& initializationStage() const { return initializationStage_; }
+    HRESULT checkGraphicsCaptureSupport();
     GraphicsContext* graphics_context() const
     {
       return graphics_context_.get();
@@ -50,15 +53,20 @@ namespace flutter_inappwebview_plugin
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 
     void createInAppWebView(const flutter::EncodableMap* arguments, std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+    std::shared_ptr<NewWindowRequestedArgs> pendingWindow(const std::optional<int64_t>& windowId) const;
     void disposeKeepAlive(const std::string& keepAliveId);
+    void disposeWebViews();
   private:
-    inline static std::shared_ptr<rx::RoHelper> rohelper_ = nullptr;
-    inline static winrt::com_ptr<ABI::Windows::System::IDispatcherQueueController>
+    std::unique_ptr<rx::RoHelper> rohelper_;
+    winrt::com_ptr<ABI::Windows::System::IDispatcherQueueController>
       dispatcher_queue_controller_ = nullptr;
-    inline static std::unique_ptr<GraphicsContext> graphics_context_ = nullptr;
-    inline static winrt::com_ptr<ABI::Windows::UI::Composition::ICompositor> compositor_ = nullptr;
+    std::unique_ptr<GraphicsContext> graphics_context_;
+    winrt::com_ptr<ABI::Windows::UI::Composition::ICompositor> compositor_ = nullptr;
+    std::map<HWND, std::shared_ptr<InAppWebView>> pendingWebViews_;
     WNDCLASS windowClass_ = {};
-    inline static bool valid_ = false;
+    bool valid_ = false;
+    HRESULT initializationResult_ = E_FAIL;
+    std::string initializationStage_ = "RoInitialize";
   };
 }
 #endif //FLUTTER_INAPPWEBVIEW_PLUGIN_IN_APP_WEBVIEW_MANAGER_H_

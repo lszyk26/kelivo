@@ -109,8 +109,10 @@ class Lucide {
   static const IconData RectangleHorizontal =
       lucide.LucideIcons.rectangleHorizontal;
   static const IconData CircleStop = lucide.LucideIcons.circleStop;
+  static const IconData CircleAlert = lucide.LucideIcons.circleAlert;
   static const IconData CircleX = lucide.LucideIcons.circleX;
   static const IconData Link2 = lucide.LucideIcons.link2;
+  static const IconData ShieldAlert = lucide.LucideIcons.shieldAlert;
   static const IconData Shield = lucide.LucideIcons.shield;
   static const IconData TriangleAlert = lucide.LucideIcons.triangleAlert;
   static const IconData Compass = lucide.LucideIcons.compass;

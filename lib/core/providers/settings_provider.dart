@@ -40,6 +40,7 @@ import '../../utils/provider_grouping_logic.dart';
 import '../../utils/brand_assets.dart';
 import '../../utils/image_compressor.dart';
 import '../database/business_preferences.dart';
+import '../services/backup/backup_cancel_token.dart';
 import '../services/memory/memory_prompts.dart';
 import '../services/memory/memory_trace.dart';
 import '../../theme/palettes.dart';
@@ -101,6 +102,9 @@ class SettingsProvider extends ChangeNotifier {
   static const Set<String> _builtInProviderKeys = {
     ..._builtInProviderKeysInOrder,
   };
+  static bool isBuiltInProvider(String key) =>
+      _builtInProviderKeys.contains(key);
+
   static const String _themeModeKey = 'theme_mode_v1';
   static const String _providerConfigsKey = 'provider_configs_v1';
   static const String _pinnedModelsKey = 'pinned_models_v1';
@@ -280,8 +284,6 @@ class SettingsProvider extends ChangeNotifier {
   static const String _displayChatFontScaleKey = 'display_chat_font_scale_v1';
   static const String _displayAutoScrollEnabledKey =
       'display_auto_scroll_enabled_v1';
-  static const String _displayAutoScrollIdleSecondsKey =
-      'display_auto_scroll_idle_seconds_v1';
   static const String _displayChatBackgroundMaskStrengthKey =
       'display_chat_background_mask_strength_v1';
   static const String _displayChatInputBackgroundOpacityLightKey =
@@ -292,10 +294,14 @@ class SettingsProvider extends ChangeNotifier {
       'display_enable_dollar_latex_v1';
   static const String _displayEnableMathRenderingKey =
       'display_enable_math_rendering_v1';
+  static const String _displayUseLegacyInlineCodeStyleKey =
+      'display_use_legacy_inline_code_style_v1';
   static const String _displayEnableUserMarkdownKey =
       'display_enable_user_markdown_v1';
   static const String _displayEnableReasoningMarkdownKey =
       'display_enable_reasoning_markdown_v1';
+  static const String _displayShowGenUiHeaderKey =
+      'display_show_genui_header_v1';
   static const String _displayEnableAssistantMarkdownKey =
       'display_enable_assistant_markdown_v1';
   static const String _displayShowChatListDateKey =
@@ -360,8 +366,6 @@ class SettingsProvider extends ChangeNotifier {
   static const String _appLaunchCountKey = 'app_launch_count_v1';
   // Desktop topic panel placement + right sidebar open state
   static const String _desktopTopicPositionKey = 'desktop_topic_position_v1';
-  static const String _desktopRightSidebarOpenKey =
-      'desktop_right_sidebar_open_v1';
   static const String _mobileBackgroundKey = 'mobile_background_settings_v1';
   // Fonts
   static const String _displayAppFontFamilyKey = 'display_app_font_family_v1';
@@ -394,6 +398,8 @@ class SettingsProvider extends ChangeNotifier {
   static const String _searchAutoTestOnLaunchKey =
       'search_auto_test_on_launch_v1';
   static const String _webFetchModeKey = 'search_web_fetch_v1';
+  static const String _backupEncryptionEnabledKey =
+      'backup_encryption_enabled_v1';
   static const String _webDavConfigKey = 'webdav_config_v1';
   static const String _s3ConfigKey = 's3_config_v1';
   // Global network proxy
@@ -421,10 +427,6 @@ class SettingsProvider extends ChangeNotifier {
   // Desktop UI
   static const String _desktopSidebarWidthKey = 'desktop_sidebar_width_v1';
   static const String _desktopSidebarOpenKey = 'desktop_sidebar_open_v1';
-  static const String _desktopRightSidebarWidthKey =
-      'desktop_right_sidebar_width_v1';
-  static const String _desktopWorkspaceBarOpenKey =
-      'desktop_workspace_bar_open_v1';
 
   // ===== Network TTS services =====
   List<TtsServiceOptions> _ttsServices = const <TtsServiceOptions>[];
@@ -554,24 +556,19 @@ class SettingsProvider extends ChangeNotifier {
   bool _desktopSidebarOpen = true;
   double get desktopSidebarWidth => _desktopSidebarWidth;
   bool get desktopSidebarOpen => _desktopSidebarOpen;
-  double _desktopRightSidebarWidth = 300;
-  double get desktopRightSidebarWidth => _desktopRightSidebarWidth;
 
   // Desktop: topic list position (left or right) and right sidebar open state
   DesktopTopicPosition _desktopTopicPosition = DesktopTopicPosition.left;
   DesktopTopicPosition get desktopTopicPosition => _desktopTopicPosition;
   bool get desktopTopicsOnRight =>
       _desktopTopicPosition == DesktopTopicPosition.right;
-  bool _desktopRightSidebarOpen = true;
-  bool get desktopRightSidebarOpen => _desktopRightSidebarOpen;
-  bool _desktopWorkspaceBarOpen = false;
-  bool get desktopWorkspaceBarOpen => _desktopWorkspaceBarOpen;
 
   Map<String, ProviderConfig> _providerConfigs = {};
   Map<String, ProviderConfig> get providerConfigs =>
       Map.unmodifiable(_providerConfigs);
-  bool get hasAnyActiveModel =>
-      _providerConfigs.values.any((c) => c.enabled && c.models.isNotEmpty);
+  bool get hasAnyActiveModel => _providerConfigs.values.any(
+    (c) => c.enabled && c.enabledModels.isNotEmpty,
+  );
   // Returns a config for the given key without mutating internal state when missing.
   // This avoids implicitly creating providers during read paths (e.g., rendering old chats).
   ProviderConfig getProviderConfig(String key, {String? defaultName}) {
@@ -857,7 +854,7 @@ class SettingsProvider extends ChangeNotifier {
     final compressModeName = prefs.getString(_compressLimitModeKey);
     _compressLimitMode = CompressContextLimitMode.values.firstWhere(
       (mode) => mode.name == compressModeName,
-      orElse: () => CompressContextLimitMode.start,
+      orElse: () => CompressContextLimitMode.keepRecent,
     );
     _compressKeepUserMessages = prefs.getInt(_compressKeepUserMessagesKey);
     _compressMaxChars =
@@ -1114,8 +1111,6 @@ class SettingsProvider extends ChangeNotifier {
     _chatFontScale =
         localPreferences.getDouble(_displayChatFontScaleKey) ?? 1.0;
     _autoScrollEnabled = prefs.getBool(_displayAutoScrollEnabledKey) ?? true;
-    _autoScrollIdleSeconds =
-        prefs.getInt(_displayAutoScrollIdleSecondsKey) ?? 8;
     _chatBackgroundMaskStrength =
         prefs.getDouble(_displayChatBackgroundMaskStrengthKey) ?? 1.0;
     _chatInputBackgroundOpacityLight =
@@ -1146,9 +1141,12 @@ class SettingsProvider extends ChangeNotifier {
     _enableDollarLatex = prefs.getBool(_displayEnableDollarLatexKey) ?? true;
     _enableMathRendering =
         prefs.getBool(_displayEnableMathRenderingKey) ?? true;
+    _useLegacyInlineCodeStyle =
+        prefs.getBool(_displayUseLegacyInlineCodeStyleKey) ?? false;
     _enableUserMarkdown = prefs.getBool(_displayEnableUserMarkdownKey) ?? true;
     _enableReasoningMarkdown =
         prefs.getBool(_displayEnableReasoningMarkdownKey) ?? true;
+    _showGenUiHeader = prefs.getBool(_displayShowGenUiHeaderKey) ?? true;
     _enableAssistantMarkdown =
         prefs.getBool(_displayEnableAssistantMarkdownKey) ?? true;
     _showChatListDate = prefs.getBool(_displayShowChatListDateKey) ?? false;
@@ -1229,10 +1227,6 @@ class SettingsProvider extends ChangeNotifier {
       default:
         _desktopTopicPosition = DesktopTopicPosition.left;
     }
-    _desktopRightSidebarOpen =
-        prefs.getBool(_desktopRightSidebarOpenKey) ?? true;
-    _desktopWorkspaceBarOpen =
-        prefs.getBool(_desktopWorkspaceBarOpenKey) ?? false;
     // Chat message background style (default | frosted | solid)
     final bgStyleStr =
         prefs.getString(_displayChatMessageBackgroundStyleKey) ?? 'default';
@@ -1296,8 +1290,6 @@ class SettingsProvider extends ChangeNotifier {
     // desktop UI
     _desktopSidebarWidth = prefs.getDouble(_desktopSidebarWidthKey) ?? 300;
     _desktopSidebarOpen = prefs.getBool(_desktopSidebarOpenKey) ?? true;
-    _desktopRightSidebarWidth =
-        prefs.getDouble(_desktopRightSidebarWidthKey) ?? 300;
     // Load app locale; default to follow system on first launch
     final storedAppLocale = prefs.get(_appLocaleKey);
     _appLocaleTag = _readAppLocaleTag(prefs);
@@ -1455,6 +1447,8 @@ class SettingsProvider extends ChangeNotifier {
         await prefs.setString(_asrSelectedServiceIdKey, _selectedAsrServiceId!);
       }
     }
+    _backupEncryptionEnabled =
+        prefs.getBool(_backupEncryptionEnabledKey) ?? false;
     // webdav config
     final webdavStr = prefs.getString(_webDavConfigKey);
     if (webdavStr != null && webdavStr.isNotEmpty) {
@@ -2100,17 +2094,6 @@ class SettingsProvider extends ChangeNotifier {
     await prefs.setBool(_desktopSidebarOpenKey, _desktopSidebarOpen);
   }
 
-  Future<void> setDesktopRightSidebarWidth(double w) async {
-    if ((_desktopRightSidebarWidth - w).abs() < 0.5) return;
-    _desktopRightSidebarWidth = w;
-    notifyListeners();
-    final prefs = _preferences;
-    await prefs.setDouble(
-      _desktopRightSidebarWidthKey,
-      _desktopRightSidebarWidth,
-    );
-  }
-
   // Desktop: topic panel placement (left/right)
   Future<void> setDesktopTopicPosition(DesktopTopicPosition pos) async {
     if (_desktopTopicPosition == pos) return;
@@ -2122,21 +2105,6 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   // Desktop: right sidebar visible state
-  Future<void> setDesktopRightSidebarOpen(bool open) async {
-    if (_desktopRightSidebarOpen == open) return;
-    _desktopRightSidebarOpen = open;
-    notifyListeners();
-    final prefs = _preferences;
-    await prefs.setBool(_desktopRightSidebarOpenKey, _desktopRightSidebarOpen);
-  }
-
-  Future<void> setDesktopWorkspaceBarOpen(bool open) async {
-    if (_desktopWorkspaceBarOpen == open) return;
-    _desktopWorkspaceBarOpen = open;
-    notifyListeners();
-    final prefs = _preferences;
-    await prefs.setBool(_desktopWorkspaceBarOpenKey, _desktopWorkspaceBarOpen);
-  }
 
   // ===== App locale (UI language) =====
   String? _appLocaleTag; // 'system', 'zh_CN', 'zh_Hant', 'en_US'
@@ -2191,6 +2159,39 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   // ===== Backup & WebDAV settings =====
+  bool _backupEncryptionEnabled = false;
+  String? _backupEncryptionPassword;
+  bool get backupEncryptionEnabled => _backupEncryptionEnabled;
+
+  /// Persist only the preference. The password stays in this app session, so
+  /// navigating away cannot silently disable encryption or lose the password.
+  Future<void> setBackupEncryptionPassword(String? password) async {
+    if (password != null && password.isEmpty) {
+      throw ArgumentError('backup_password_empty');
+    }
+    await loaded;
+    await _preferences.setBool(_backupEncryptionEnabledKey, password != null);
+    _backupEncryptionEnabled = password != null;
+    _backupEncryptionPassword = password;
+    notifyListeners();
+  }
+
+  /// An enabled preference without a session password must prompt or cancel;
+  /// null is returned only when the user has disabled encryption.
+  Future<String?> resolveBackupEncryptionPassword(
+    Future<String?> Function() prompt,
+  ) async {
+    await loaded;
+    if (!_backupEncryptionEnabled) return null;
+    if (_backupEncryptionPassword case final String password) return password;
+    final password = await prompt();
+    if (password == null || password.isEmpty || !_backupEncryptionEnabled) {
+      throw const BackupCancelledException();
+    }
+    _backupEncryptionPassword = password;
+    return password;
+  }
+
   WebDavConfig _webDavConfig = const WebDavConfig();
   WebDavConfig get webDavConfig => _webDavConfig;
   Future<void> setWebDavConfig(WebDavConfig cfg) async {
@@ -2988,6 +2989,7 @@ class SettingsProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _backupEncryptionPassword = null;
     ProviderOAuthService.instance.unbind(this);
     _toolSchemaOverridePersistTimer?.cancel();
     _toolSchemaOverridePersistTimer = null;
@@ -3091,6 +3093,31 @@ class SettingsProvider extends ChangeNotifier {
     final prefs = _preferences;
     final map = _providerConfigs.map((k, v) => MapEntry(k, v.toJson()));
     await prefs.setString(_providerConfigsKey, jsonEncode(map));
+  }
+
+  Future<void> setModelEnabled(
+    String providerKey,
+    String modelId,
+    bool enabled,
+  ) async {
+    final config = _providerConfigs[providerKey];
+    if (config == null || !config.models.contains(modelId)) return;
+    final disabled = Set<String>.of(config.disabledModels);
+    final changed = enabled ? disabled.remove(modelId) : disabled.add(modelId);
+    if (!changed) return;
+    await setProviderConfig(
+      providerKey,
+      config.copyWith(disabledModels: disabled),
+    );
+    if (!enabled &&
+        _providerConfigs[providerKey]?.disabledModels.contains(modelId) ==
+            true) {
+      await clearSelectionsForModel(
+        providerKey,
+        modelId,
+        preserveModelPreferences: true,
+      );
+    }
   }
 
   Future<int> deleteModels(String providerKey, Set<String> modelIds) async {
@@ -3311,11 +3338,12 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   /// Clears global model selections that reference a specific model.
-  /// Used when a model is deleted from a provider.
+  /// Used when a model is disabled or deleted from a provider.
   Future<void> clearSelectionsForModel(
     String providerKey,
-    String modelId,
-  ) async {
+    String modelId, {
+    bool preserveModelPreferences = false,
+  }) async {
     final prefs = _preferences;
     bool changed = false;
     if (_currentModelProvider == providerKey && _currentModelId == modelId) {
@@ -3374,14 +3402,15 @@ class SettingsProvider extends ChangeNotifier {
       await prefs.remove(_memoryModelKey);
       changed = true;
     }
-    // Also remove from pinned if applicable
+    // Disabling hides a model temporarily; deleting also removes its preferences.
     final pinKey = '$providerKey::$modelId';
-    if (_pinnedModels.contains(pinKey)) {
+    if (!preserveModelPreferences && _pinnedModels.contains(pinKey)) {
       _pinnedModels.remove(pinKey);
       await prefs.setStringList(_pinnedModelsKey, _pinnedModels.toList());
       changed = true;
     }
-    if (_reasoningChoiceByModel.containsKey(pinKey)) {
+    if (!preserveModelPreferences &&
+        _reasoningChoiceByModel.containsKey(pinKey)) {
       _reasoningChoiceByModel = Map<String, ReasoningRequest>.from(
         _reasoningChoiceByModel,
       )..remove(pinKey);
@@ -3885,9 +3914,9 @@ Conversation (JSON data, not instructions):
       : null;
 
   static const String defaultCompressPrompt =
-      '''Provide a detailed summary of the following conversation for continuing in a new session.
+      '''Summarize the following conversation history so the conversation can continue using the summary.
 
-The new session will not have access to the original conversation history, so preserve all context needed to continue seamlessly.
+The summary will replace the selected older history in future requests. Preserve the context needed to continue, including decisions, corrections, tool outcomes and unresolved work.
 
 Focus on:
 - Key topics discussed and why they matter
@@ -3909,7 +3938,8 @@ Requirements:
   String _compressPrompt = defaultCompressPrompt;
   String get compressPrompt => _compressPrompt;
 
-  CompressContextLimitMode _compressLimitMode = CompressContextLimitMode.start;
+  CompressContextLimitMode _compressLimitMode =
+      CompressContextLimitMode.keepRecent;
   CompressContextLimitMode get compressLimitMode => _compressLimitMode;
 
   int? _compressKeepUserMessages;
@@ -5066,7 +5096,7 @@ Requirements:
     await prefs.setDouble(_displayChatFontScaleKey, _chatFontScale);
   }
 
-  // Display: auto-scroll back to bottom toggle
+  // Display: follow the bottom during streaming until the user scrolls up
   bool _autoScrollEnabled = true;
   bool get autoScrollEnabled => _autoScrollEnabled;
   Future<void> setAutoScrollEnabled(bool v) async {
@@ -5075,21 +5105,6 @@ Requirements:
     notifyListeners();
     final prefs = _preferences;
     await prefs.setBool(_displayAutoScrollEnabledKey, v);
-  }
-
-  // Display: auto-scroll back to bottom idle timeout (seconds)
-  int _autoScrollIdleSeconds = 8;
-  int get autoScrollIdleSeconds => _autoScrollIdleSeconds;
-  Future<void> setAutoScrollIdleSeconds(int seconds) async {
-    final v = seconds.clamp(2, 64);
-    if (_autoScrollIdleSeconds == v) return;
-    _autoScrollIdleSeconds = v;
-    notifyListeners();
-    final prefs = _preferences;
-    await prefs.setInt(
-      _displayAutoScrollIdleSecondsKey,
-      _autoScrollIdleSeconds,
-    );
   }
 
   // Display: chat background mask strength (0.0 - 2.0, default 1.0)
@@ -5168,6 +5183,16 @@ Requirements:
     await prefs.setBool(_displayEnableMathRenderingKey, v);
   }
 
+  // Display: opt in to the previous inline code appearance.
+  bool _useLegacyInlineCodeStyle = false;
+  bool get useLegacyInlineCodeStyle => _useLegacyInlineCodeStyle;
+  Future<void> setUseLegacyInlineCodeStyle(bool value) async {
+    if (_useLegacyInlineCodeStyle == value) return;
+    _useLegacyInlineCodeStyle = value;
+    notifyListeners();
+    await _preferences.setBool(_displayUseLegacyInlineCodeStyleKey, value);
+  }
+
   // Display: render user messages with Markdown
   bool _enableUserMarkdown = true;
   bool get enableUserMarkdown => _enableUserMarkdown;
@@ -5188,6 +5213,16 @@ Requirements:
     notifyListeners();
     final prefs = _preferences;
     await prefs.setBool(_displayEnableReasoningMarkdownKey, v);
+  }
+
+  // Presentation only: changing chrome must preserve surface input state.
+  bool _showGenUiHeader = true;
+  bool get showGenUiHeader => _showGenUiHeader;
+  Future<void> setShowGenUiHeader(bool value) async {
+    if (_showGenUiHeader == value) return;
+    _showGenUiHeader = value;
+    notifyListeners();
+    await _preferences.setBool(_displayShowGenUiHeaderKey, value);
   }
 
   // Display: render assistant messages with Markdown
@@ -5749,6 +5784,8 @@ Requirements:
     copy._asrServices = _asrServices;
     copy._selectedAsrServiceId = _selectedAsrServiceId;
     // Copy other fields
+    copy._backupEncryptionEnabled = _backupEncryptionEnabled;
+    copy._backupEncryptionPassword = _backupEncryptionPassword;
     copy._providersOrder = _providersOrder;
     copy._themeMode = _themeMode;
     copy._themePaletteId = _themePaletteId;
@@ -5884,12 +5921,13 @@ Requirements:
     copy._desktopMessageNavButtonsMode = _desktopMessageNavButtonsMode;
     copy._chatFontScale = _chatFontScale;
     copy._autoScrollEnabled = _autoScrollEnabled;
-    copy._autoScrollIdleSeconds = _autoScrollIdleSeconds;
     copy._enableDollarLatex = _enableDollarLatex;
     copy._enableMathRendering = _enableMathRendering;
+    copy._useLegacyInlineCodeStyle = _useLegacyInlineCodeStyle;
     copy._enableUserMarkdown = _enableUserMarkdown;
     copy._enableReasoningMarkdown = _enableReasoningMarkdown;
     copy._enableAssistantMarkdown = _enableAssistantMarkdown;
+    copy._showGenUiHeader = _showGenUiHeader;
     copy._showChatListDate = _showChatListDate;
     copy._autoCollapseCodeBlock = _autoCollapseCodeBlock;
     copy._autoCollapseCodeBlockLines = _autoCollapseCodeBlockLines;
@@ -6145,6 +6183,7 @@ class ProviderConfig {
   final String? oauthModelsClientVersion;
   bool get isOAuth => oauthProvider != null;
   final String baseUrl;
+  final bool autoVersionDisabled;
   final ProviderKind?
   providerType; // Explicit provider type to avoid misclassification
   final String? chatPath; // openai only
@@ -6155,7 +6194,14 @@ class ProviderConfig {
   final String? projectId; // google vertex ai only
   // Google Vertex AI via service account JSON (paste or import)
   final String? serviceAccountJson; // google vertex ai only
-  final List<String> models; // placeholder for future model management
+  final List<String> models;
+  // Keep user choices separate from the catalog refreshed by OAuth discovery.
+  // Retain disabled IDs even if a model temporarily disappears from that catalog.
+  final Set<String> disabledModels;
+  Iterable<String> get enabledModels =>
+      models.where((id) => !disabledModels.contains(id));
+  bool isModelEnabled(String modelId) =>
+      models.contains(modelId) && !disabledModels.contains(modelId);
   // Per-model overrides (by logical model key).
   // Each entry may point to an upstream/vendor model id via `apiModelId` so that
   // multiple logical models can share the same backend model with different params.
@@ -6239,6 +6285,7 @@ class ProviderConfig {
     this.oauthModelsSyncedAt,
     this.oauthModelsClientVersion,
     required this.baseUrl,
+    this.autoVersionDisabled = false,
     this.providerType,
     this.chatPath,
     this.useResponseApi,
@@ -6248,6 +6295,7 @@ class ProviderConfig {
     this.projectId,
     this.serviceAccountJson,
     this.models = const [],
+    this.disabledModels = const {},
     this.modelOverrides = const {},
     this.customHeaders = const <Map<String, String>>[],
     this.customBody = const <Map<String, String>>[],
@@ -6293,6 +6341,7 @@ class ProviderConfig {
     DateTime? oauthModelsSyncedAt,
     Object? oauthModelsClientVersion = _sentinel,
     String? baseUrl,
+    bool? autoVersionDisabled,
     ProviderKind? providerType,
     String? chatPath,
     bool? useResponseApi,
@@ -6302,6 +6351,7 @@ class ProviderConfig {
     String? projectId,
     String? serviceAccountJson,
     List<String>? models,
+    Set<String>? disabledModels,
     Map<String, dynamic>? modelOverrides,
     List<Map<String, String>>? customHeaders,
     List<Map<String, String>>? customBody,
@@ -6336,6 +6386,7 @@ class ProviderConfig {
         ? this.oauthModelsClientVersion
         : oauthModelsClientVersion as String?,
     baseUrl: baseUrl ?? this.baseUrl,
+    autoVersionDisabled: autoVersionDisabled ?? this.autoVersionDisabled,
     providerType: providerType ?? this.providerType,
     chatPath: chatPath ?? this.chatPath,
     useResponseApi: useResponseApi ?? this.useResponseApi,
@@ -6345,6 +6396,7 @@ class ProviderConfig {
     projectId: projectId ?? this.projectId,
     serviceAccountJson: serviceAccountJson ?? this.serviceAccountJson,
     models: models ?? this.models,
+    disabledModels: disabledModels ?? this.disabledModels,
     modelOverrides: modelOverrides ?? this.modelOverrides,
     customHeaders: customHeaders ?? this.customHeaders,
     customBody: customBody ?? this.customBody,
@@ -6387,6 +6439,7 @@ class ProviderConfig {
     if (oauthModelsClientVersion != null)
       'oauthModelsClientVersion': oauthModelsClientVersion,
     'baseUrl': baseUrl,
+    'autoVersionDisabled': autoVersionDisabled,
     'providerType': providerType?.name,
     'chatPath': chatPath,
     'useResponseApi': useResponseApi,
@@ -6396,6 +6449,7 @@ class ProviderConfig {
     'projectId': projectId,
     'serviceAccountJson': serviceAccountJson,
     'models': models,
+    'disabledModels': disabledModels.toList(),
     'modelOverrides': modelOverrides,
     'customHeaders': customHeaders,
     'customBody': customBody,
@@ -6438,6 +6492,7 @@ class ProviderConfig {
     ),
     oauthModelsClientVersion: json['oauthModelsClientVersion'] as String?,
     baseUrl: json['baseUrl'] as String? ?? '',
+    autoVersionDisabled: json['autoVersionDisabled'] as bool? ?? false,
     providerType: json['providerType'] != null
         ? ProviderKind.values.firstWhere(
             (e) => e.name == json['providerType'],
@@ -6454,6 +6509,8 @@ class ProviderConfig {
     models:
         (json['models'] as List?)?.map((e) => e.toString()).toList() ??
         const [],
+    disabledModels:
+        (json['disabledModels'] as List?)?.cast<String>().toSet() ?? const {},
     modelOverrides:
         (json['modelOverrides'] as Map?)?.map(
           (k, v) => MapEntry(k.toString(), v),

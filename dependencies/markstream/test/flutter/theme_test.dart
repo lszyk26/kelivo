@@ -52,7 +52,7 @@ void main() {
     );
   });
   test(
-    'app font families propagate while heading and chrome weights follow tokens',
+    'app font families and platform-adjusted weights propagate to all text',
     () {
       final theme = MarkstreamTheme.fromColorScheme(
         light,
@@ -73,13 +73,17 @@ void main() {
       expect(theme.body.height, 1.55);
       expect(theme.body.letterSpacing, 0);
       expect(theme.blockSpacing, 18);
-      expect(theme.headings.first.fontWeight, FontWeight.w700);
+      expect(theme.headings.first.fontWeight, FontWeight.w600);
       expect(theme.strongWeight, FontWeight.w600);
       expect(theme.link.fontSize, isNull);
-      expect(theme.headings[1].fontWeight, FontWeight.w600);
+      expect(
+        theme.headings.skip(1).map((style) => style.fontWeight),
+        everyElement(FontWeight.w500),
+      );
+      expect(theme.chrome.label.fontWeight, FontWeight.w400);
       expect(theme.details.summary.fontWeight, FontWeight.w400);
       expect(theme.table.heading.fontFamily, 'AppFont');
-      expect(theme.table.heading.fontWeight, FontWeight.w600);
+      expect(theme.table.heading.fontWeight, FontWeight.w500);
       expect(theme.code.text.fontFamily, 'AppMono');
       expect(theme.code.text.fontFamilyFallback, ['AppCjk']);
       expect(theme.inlineCode.text.fontFamilyFallback, ['AppCjk']);
@@ -165,6 +169,7 @@ void main() {
           colors: first.colors.copyWith(),
           chrome: first.chrome.copyWith(),
           inlineCode: first.inlineCode.copyWith(),
+          keyboard: first.keyboard.copyWith(),
           quote: first.quote.copyWith(),
           task: first.task.copyWith(),
           table: first.table.copyWith(),
@@ -176,6 +181,7 @@ void main() {
         first.copyWith(colors: first.colors.copyWith(border: Colors.red)),
         first.copyWith(chrome: first.chrome.copyWith(height: 40)),
         first.copyWith(inlineCode: first.inlineCode.copyWith(opticalCenter: 8)),
+        first.copyWith(keyboard: first.keyboard.copyWith(opticalCenter: 8)),
         first.copyWith(quote: first.quote.copyWith(textColor: Colors.red)),
         first.copyWith(task: first.task.copyWith(strokeWidth: 2)),
         first.copyWith(

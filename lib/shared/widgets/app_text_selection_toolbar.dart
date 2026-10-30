@@ -177,7 +177,6 @@ class _SelectionButtonLabel extends StatelessWidget {
   }
 }
 
-
 /// Mobile selection toolbar that keeps the primary editing actions inline and
 /// moves everything else into a bounded popup.
 ///

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +46,11 @@ class AppTextSelectionToolbar extends StatelessWidget {
     if (platform != TargetPlatform.macOS &&
         platform != TargetPlatform.windows &&
         platform != TargetPlatform.linux) {
-      return AdaptiveTextSelectionToolbar.buttonItems(
+      return _BoundedSelectionToolbar(
         anchors: anchors,
         buttonItems: buttonItems,
+        selectionContext: selectionContext,
+        onDismiss: onDismiss,
       );
     }
 
@@ -169,6 +173,149 @@ class _SelectionButtonLabel extends StatelessWidget {
         const SizedBox(width: 12),
         Text(shortcut!, style: style.copyWith(fontSize: 12)),
       ],
+    );
+  }
+}
+
+
+/// Mobile selection toolbar that keeps the primary editing actions inline and
+/// moves everything else into a bounded popup.
+///
+/// Flutter's built-in overflow menu lays its items out without width/height
+/// constraints on some Android devices, where it stretches into a full-height
+/// column that covers the composer and the chat above it (see #1329).
+class _BoundedSelectionToolbar extends StatelessWidget {
+  const _BoundedSelectionToolbar({
+    required this.anchors,
+    required this.buttonItems,
+    required this.selectionContext,
+    required this.onDismiss,
+  });
+
+  final TextSelectionToolbarAnchors anchors;
+  final List<ContextMenuButtonItem> buttonItems;
+  final BuildContext selectionContext;
+  final VoidCallback onDismiss;
+
+  static const _inlineTypes = <ContextMenuButtonType>{
+    ContextMenuButtonType.cut,
+    ContextMenuButtonType.copy,
+    ContextMenuButtonType.paste,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final inline = <ContextMenuButtonItem>[];
+    final overflow = <ContextMenuButtonItem>[];
+    for (final item in buttonItems) {
+      if (_inlineTypes.contains(item.type)) {
+        inline.add(item);
+      } else {
+        overflow.add(item);
+      }
+    }
+    if (overflow.isEmpty) {
+      return AdaptiveTextSelectionToolbar.buttonItems(
+        anchors: anchors,
+        buttonItems: inline,
+      );
+    }
+    final l10n = MaterialLocalizations.of(context);
+    return AdaptiveTextSelectionToolbar(
+      anchors: anchors,
+      children: [
+        for (final item in inline)
+          TextSelectionToolbarTextButton(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            onPressed: item.onPressed,
+            child: Text(item.label ?? _defaultSelectionLabel(item.type, l10n)),
+          ),
+        _BoundedOverflowButton(
+          items: overflow,
+          anchors: anchors,
+          selectionContext: selectionContext,
+          onDismiss: onDismiss,
+        ),
+      ],
+    );
+  }
+}
+
+String _defaultSelectionLabel(
+  ContextMenuButtonType type,
+  MaterialLocalizations l10n,
+) {
+  if (type == ContextMenuButtonType.cut) return l10n.cutButtonLabel;
+  if (type == ContextMenuButtonType.copy) return l10n.copyButtonLabel;
+  if (type == ContextMenuButtonType.paste) return l10n.pasteButtonLabel;
+  if (type == ContextMenuButtonType.selectAll) return l10n.selectAllButtonLabel;
+  return '';
+}
+
+class _BoundedOverflowButton extends StatelessWidget {
+  const _BoundedOverflowButton({
+    required this.items,
+    required this.anchors,
+    required this.selectionContext,
+    required this.onDismiss,
+  });
+
+  final List<ContextMenuButtonItem> items;
+  final TextSelectionToolbarAnchors anchors;
+  final BuildContext selectionContext;
+  final VoidCallback onDismiss;
+
+  Future<void> _showOverflowMenu(BuildContext context) async {
+    final l10n = MaterialLocalizations.of(context);
+    final overlay = Overlay.maybeOf(selectionContext);
+    final overlayBox = overlay?.context.findRenderObject();
+    final size = overlayBox is RenderBox && overlayBox.hasSize
+        ? overlayBox.size
+        : MediaQuery.sizeOf(selectionContext);
+    final anchor = anchors.primaryAnchor;
+    final dx = anchor.dx.clamp(8.0, size.width - 8);
+    final dy = anchor.dy.clamp(8.0, size.height - 8);
+    final selected = await showMenu<ContextMenuButtonItem>(
+      context: selectionContext,
+      position: RelativeRect.fromLTRB(
+        dx,
+        dy,
+        (size.width - dx).clamp(0.0, size.width),
+        (size.height - dy).clamp(0.0, size.height),
+      ),
+      constraints: const BoxConstraints(
+        minWidth: 168,
+        maxWidth: 248,
+        maxHeight: 300,
+      ),
+      items: [
+        for (final item in items)
+          PopupMenuItem<ContextMenuButtonItem>(
+            value: item,
+            height: 42,
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                item.label ?? _defaultSelectionLabel(item.type, l10n),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+      ],
+    );
+    onDismiss();
+    if (selected?.onPressed != null) {
+      selected!.onPressed!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextSelectionToolbarTextButton(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+      onPressed: () => unawaited(_showOverflowMenu(context)),
+      child: const Icon(Icons.more_vert, size: 18),
     );
   }
 }
